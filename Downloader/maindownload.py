@@ -244,7 +244,6 @@ class copernicus_sentinel_1(AbstractDownloader):
         pass
             
             
-            
 class copernicus_sentinel_2(AbstractDownloader):
     @app.route('/download/sentinel2', methods =['GET', 'POST'])
     def Sendtinel2_downloader():
@@ -272,18 +271,16 @@ class copernicus_sentinel_2(AbstractDownloader):
     def printURL(fromP, toP):
         pass 
 
-
 class parser: 
     # Parse date and month. Parsing will be used in TRMM_RT
     def parse_nasa(period1, period2):
         tmp = period1.split('-')
         tmp2 = period2.split('-')
-        # year and month return
-        #print(tmp[0],tmp[1])
         return tmp[0], tmp[1], tmp2[0], tmp2[1]
     def parse_sentinel(json):
         jsondir = "/home/ubuntu/RemoteSensing_v1/Downloader/sentinel_folder/" + json
         return jsondir
+    
 # Here is Download Port Number
 app.run(host='0.0.0.0', port=5000)   
 

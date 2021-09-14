@@ -111,14 +111,14 @@ class filecontroller:
         #print("fileNames", filenames)
             
 # download files into converter-system folder - 1 
-class downloadcontroller: 
+class downloadcontroller_trmmRT: 
     def wgetdownload_trmm(url,filename):
         try:
             # If you want to change downlaod file directory, change here!
             os.system('wget -P ../storage/nc4file/ --user gogod951 --password dbsGUR123@# %s/%s' %(url,filename))
         except Exception as e:
             print(" File not found, please refer to the website manually for download link", e)
-    
+class downloadcontroller_mergedIR: 
     def wgetdownload_mergedir(url,filename):
         try:
             # If you want to change downlaod file directory, change here!
@@ -127,18 +127,19 @@ class downloadcontroller:
             print(" File not found, please refer to the website manually for download link", e)
 
 
-class threadcontroller:
+class threadcontroller_trmmRT:
     def threadrun_trmm(url, filenames):
         for name in filenames:
-            processThread = threading.Thread(target=downloadcontroller.wgetdownload_trmm, args=(url, name)) # parameters and functions have to be passed separately
+            processThread = threading.Thread(target=downloadcontroller_trmmRT.wgetdownload_trmm, args=(url, name)) # parameters and functions have to be passed separately
             processThread.start() # START THE THREAD
         # Join Thread HERE. Because For loop is over, then other Thread will be started. before then next Thread should be waited.
         processThread.join()
         return True
     
+class threadcontroller_mergedIR:
     def threadrun_mergedir(url, filenames):
         for name in filenames:
-            processThread = threading.Thread(target=downloadcontroller.wgetdownload_mergedir, args=(url, name)) # parameters and functions have to be passed separately
+            processThread = threading.Thread(target=downloadcontroller_mergedIR.wgetdownload_mergedir, args=(url, name)) # parameters and functions have to be passed separately
             processThread.start() # START THE THREAD
         # Join Thread HERE. Because For loop is over, then other Thread will be started. before then next Thread should be waited.
         processThread.join()
@@ -152,7 +153,7 @@ class downloadClass:
         
         # 쓰레드 돌리려면 아래거 하면 됨 
         # DO NOT USE THIS THREAD WHEN YOU TEST CODE!!! IT WILL DOWNLOAD OVER HUNDREADS OF FILES SIMULTANEOUSLY!!!
-        # threadcontroller.threadrun_trmm(url, filenames)
+        # threadcontroller_trmmRT.threadrun_trmm(url, filenames)
         
     def download_mergedir(url, fromY, toY, fromM, toM):
         try:
@@ -176,7 +177,7 @@ class downloadClass:
             print(filtered_filename)
             print(url)
             # DO NOT USE THIS THREAD WHEN YOU TEST CODE!!! IT WILL DOWNLOAD OVER HUNDREAD OF FILES SIMULTANEOUSLY!!!
-            # threadcontroller.threadrun_mergedir(url, filtered_filename)
+            # threadcontroller_mergedIR.threadrun_mergedir(url, filtered_filename)
             return True 
         
         except OSError:
