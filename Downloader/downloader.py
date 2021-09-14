@@ -11,7 +11,7 @@ from db_convertinfo import dbconverttable
 
 # FILE LINK GET FROM XML
 class xmlcontroller:
-    def xml_trmm_rt_file():
+    def xml_trmm_rt_file(fromP, toP):
         tree = parse('../XMLfiles/trmm_rt.xml')
         root = tree.getroot()
         trmm = root.findall("DATA")
@@ -149,33 +149,39 @@ class downloadClass:
     def download_trmm(url):
         filenames = filecontroller.filenamesget_trmm(url)
         # print(filenames, "File Name")
-        # 쓰레드 돌리려면 아래거 하면 됨
         
+        # 쓰레드 돌리려면 아래거 하면 됨 
         # DO NOT USE THIS THREAD WHEN YOU TEST CODE!!! IT WILL DOWNLOAD OVER HUNDREADS OF FILES SIMULTANEOUSLY!!!
-        #threadcontroller.threadrun_trmm(url, filenames)
+        # threadcontroller.threadrun_trmm(url, filenames)
         
     def download_mergedir(url, fromY, toY, fromM, toM):
-        filenames = filecontroller.filenameget_mergedir(url, fromY, toY, fromM, toM)
-        #print(filenames, "FileName_mergedIR")
-        period_ym = fromY + fromM
+        try:
+            filenames = filecontroller.filenameget_mergedir(url, fromY, toY, fromM, toM)
+            #print(filenames, "FileName_mergedIR")
+            period_ym = fromY + fromM
+            
+            yearcount = int(toY) - int(fromY)
+            monthcount = int(toM) - int(fromM)
+            
+            # 여기서 이제.. 연, 달로 받아오는거 해야하는데.. 지금은 연 단위로만 만들었음.
+            
+            filtered_filename = []
+            
+            for i in range(0, monthcount + 1):
+                month = int(fromM) + i
+                period_ym = fromY + str(month)
+                for j in filenames:
+                    if j.find(period_ym):
+                        filtered_filename.append(j)
+            print(filtered_filename)
+            print(url)
+            # DO NOT USE THIS THREAD WHEN YOU TEST CODE!!! IT WILL DOWNLOAD OVER HUNDREAD OF FILES SIMULTANEOUSLY!!!
+            # threadcontroller.threadrun_mergedir(url, filtered_filename)
+            return True 
         
-        yearcount = int(toY) - int(fromY)
-        monthcount = int(toM) - int(fromM)
-        
-        # 여기서 이제.. 연, 달로 받아오는거 해야하는데.. 지금은 연 단위로만 만들었음.
-        
-        filtered_filename = []
-        
-        for i in range(0, monthcount + 1):
-            month = int(fromM) + i
-            period_ym = fromY + str(month)
-            for j in filenames:
-                if j.find(period_ym):
-                    filtered_filename.append(j)
-        print(filtered_filename)
-        print(url)
-        # DO NOT USE THIS THREAD WHEN YOU TEST CODE!!! IT WILL DOWNLOAD OVER HUNDREAD OF FILES SIMULTANEOUSLY!!!
-        threadcontroller.threadrun_mergedir(url, filtered_filename)
+        except OSError:
+            print("OS Error")
+            return False
         
 """
 class mergedirdownload:
