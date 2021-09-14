@@ -21,7 +21,12 @@ def main():
 No meaning on __init__ function. The method is to classify download type and related files. 
 """
 
-class classifier:
+
+# Classifier Abstract Compnent -> Nasa filedownloader (This are concrete components)
+#                             -> Sentinel Downlaoder 
+
+
+class classifier: # why this called to classifier
     def __init__(self, downloadmethod, controlfile):
         self.downloadmethod = "wget"
         self.controlfile = "xml"

@@ -38,7 +38,6 @@ class fileconverter:
             # When we use Thread, our virtual machine's power is not enough to run large amount of thread again.    
             # ThreadNC4.threadstarter()
             
-        
         # 다이렉트로 URL 쏘면 바로 여기로 온다. 
         elif request.method == 'GET':
             # response = requests.get(url_items)
@@ -54,21 +53,12 @@ class fileconverter:
                 #print(splited[-1], " Splited")
                 filename = splited[-1].split('.')
                 #print(filename[0], " File name")
-                
-                fileconvert_class.nc4converter(i, lists, filename[0])
-                
-                
+                fileconvert_class.nc4converter(i, lists, filename[0]) 
             # THIS IS COVERTER WITH THREAD    
             # When we use Thread, our virtual machine's power is not enough to run larege amount of thread again.
             #ThreadNC4.threadstarter()
-            
             #print("NC4 Starter GET Method")    
-    
-    
-    
-    
-    
-    
+
     @app.route('/converter/mergeIRnc4totif', methods=['POST','GET'])
     def mergedirconvtiff2nc4():
         # url_itmes는 GET이나 POST로 데이터 송수신할 때 사용 함. 
@@ -93,7 +83,6 @@ class fileconverter:
             # THIS IS COVERTER WITH THREAD    
             # When we use Thread, our virtual machine's power is not enough to run large amount of thread again.    
             # ThreadNC4.threadstarter()
-            
         
         # 다이렉트로 URL 쏘면 바로 여기로 온다. 
         elif request.method == 'GET':
@@ -122,10 +111,6 @@ class fileconverter:
         return render_template('index.html')
 #Convert Port Number
 
-#class fileconverter():
-#    def __init(self, downloadmethod, controlfile):
-#        self.url_items = 
-        
 app.run(host='0.0.0.0', port=5002)
 
 #1 Bash가 File Converter 5002
