@@ -153,7 +153,7 @@ class downloadClass:
         
         # 쓰레드 돌리려면 아래거 하면 됨 
         # DO NOT USE THIS THREAD WHEN YOU TEST CODE!!! IT WILL DOWNLOAD OVER HUNDREADS OF FILES SIMULTANEOUSLY!!!
-        # threadcontroller_trmmRT.threadrun_trmm(url, filenames)
+        #threadcontroller_trmmRT.threadrun_trmm(url, filenames)
         
     def download_mergedir(url, fromY, toY, fromM, toM):
         try:
@@ -165,6 +165,7 @@ class downloadClass:
             monthcount = int(toM) - int(fromM)
             
             # 여기서 이제.. 연, 달로 받아오는거 해야하는데.. 지금은 연 단위로만 만들었음.
+            # TO DO: Year Change. EX) Nov.2011 - JAN.2012
             
             filtered_filename = []
             
@@ -177,7 +178,7 @@ class downloadClass:
             print(filtered_filename)
             print(url)
             # DO NOT USE THIS THREAD WHEN YOU TEST CODE!!! IT WILL DOWNLOAD OVER HUNDREAD OF FILES SIMULTANEOUSLY!!!
-            # threadcontroller_mergedIR.threadrun_mergedir(url, filtered_filename)
+            #threadcontroller_mergedIR.threadrun_mergedir(url, filtered_filename)
             return True 
         
         except OSError:

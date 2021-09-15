@@ -7,7 +7,7 @@ from downloadmethod.sentinelAPI import sentinelAPI
 from filechecker.zipreleaser import unzipper
 
 class sentinel1:
-    def sentinel_1(self, jsondirectory):
+    def sentinel_1(jsondirectory, from_period, to_period):
         filenames = []
         api = sentinelAPI.API_info()
 
@@ -17,14 +17,16 @@ class sentinel1:
         #api.download(product_id)
         # search by polygon, time, and SciHub query keywords
         
-        footprint = geojson_to_wkt(read_geojson(self.jsondirectory))
+        #print(jsondirectory, from_period, to_period, "In Sentinel1 File")
+        footprint = geojson_to_wkt(read_geojson(jsondirectory))
+        #print(footprint)
 
         print("Footprint is done and searching files now.. ")
         tiles = ['35VMD', '35VLD', '35VLE']
         
         products = api.query(footprint,
-                            #date = ('20190622', '20190624'), # We can choose specific date also.
-                            date = ("NOW-5DAYS", "NOW"), # "NOW-XXDAYS", "NOW" -> download files from before 10 days to Now
+                            date=('20151219', date(2015, 12, 29)), # We can choose specific date also.
+                            #date = ("NOW-5DAYS", "NOW"), # "NOW-XXDAYS", "NOW" -> download files from before 10 days to Now
                             platformname = 'Sentinel-1', # Sentinel-1, Sentinel-2, Sentinel-3
                             cloudcoverpercentage = (0, 10)) # Cloud cover percentage 0 - 100%
 
@@ -33,8 +35,10 @@ class sentinel1:
         print("File Query is done")
 
         # download all results from the search
-        #api.download_all(products)
-        print(api.download_all(products))
+        status = api.download_all(products)
+        #print(api.download_all(products))
+        
+        return status
     
 # To extract files, use unzip()
     #unzip() 
@@ -98,7 +102,7 @@ for tile in tiles:
     pp = api.query(**kw)
     products.update(pp)
 
-api.download_all(products)
+api.download_all(products)x
 
 
 

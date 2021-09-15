@@ -43,67 +43,66 @@
               <h1 class="text-center">Choose a type and downloading periods </h1>
               <p>Merged IR</p>
               <form action='/download/mergedirTest', method = 'POST'>
-                <label for="trmm">Choose a type:</label>
+                <label for="mergedIR">Choose a type:</label>
                 <select name="lists" id="lists">
                   <option value="GPM MergedIR.1">GPM MergedIR.1</option>
                 </select>
               
                 <label>
                   Period FROM 
-                  <input type="date" name="periodfrom" min="1998-05-19" max="2021-09-11" required>
+                  <input type="date" name="periodfrom" min="1998-05-19" max="2021-09-31" required>
                   <span class="validity"></span>
                 </label>
                 <label>
                   Period To 
-                  <input type="date" name="periodto" min="1998-05-19" max="2021-09-11" required>
+                  <input type="date" name="periodto" min="1998-05-19" max="2021-09-31" required>
                   <span class="validity"></span>
                 </label>
                 <button>Submit</button>
               </form>
 
               <p>Sentinel-1</p>
-              <form action='/schedular', method = 'POST'>
-                <label for="trmm">Choose a type:</label>
+              <form action='/download/sentinel1', method = 'POST'>
+                <label for="sentinel_1">Type is sentinel1</label>
                 <select name="lists" id="lists">
-                  <option value="Sentinel_1">Sentinel_1</option>
+                  <option value="Sent1">Sentinel1</option>
                 </select>
               
                 <label>
-                  <br/>PloygonXY_1
-                  <input type="text" name= "PloygonCord_1X"  required> <input type="text" name= "PloygonCord_1Y"  required> <br/>
-                  PloygonXY_2
-                  <input type="text" name= "PloygonCord_2X"  required> <input type="text" name= "PloygonCord_2Y"  required> <br/>
-                  PloygonXY_3
-                  <input type="text" name= "PloygonCord_3X"  required> <input type="text" name= "PloygonCord_3Y"  required> <br/>
-                  PloygonXY_4
-                  <input type="text" name= "PloygonCord_4X"  required> <input type="text" name= "PloygonCord_4Y"  required> <br/>
-                  PloygonXY_5
-                  <input type="text" name= "PloygonCord_5X"  required> <input type="text" name= "PloygonCord_5Y"  required> <br/>
+                  Period FROM 
+                  <input type="date" name="periodfrom" min="1998-05-19" max="2021-09-31" required>
+                  <span class="validity"></span>
+                </label>
+                <label>
+                  Period To 
+                  <input type="date" name="periodto" min="1998-05-19" max="2021-09-31" required>
+                  <span class="validity"></span>
                 </label>
                 <button>Submit</button>
               </form>
 
               <p>Sentinel-2</p>
-              <form action='/schedular', method = 'POST'>
-                <label for="trmm">Choose a type:</label>
+              <form action='/download/sentinel2', method = 'POST'>
+                <label for="sentinel_1">Type is sentinel-2</label>
                 <select name="lists" id="lists">
-                  <option value="Sentinel_2">Sentinel_2</option>
+                  <option value="Sent1">Sentinel2</option>
                 </select>
               
                 <label>
-                  <br/>PloygonXY_1
-                  <input type="text" name= "PloygonCord_1X"  required> <input type="text" name= "PloygonCord_1Y"  required> <br/>
-                  PloygonXY_2
-                  <input type="text" name= "PloygonCord_2X"  required> <input type="text" name= "PloygonCord_2Y"  required> <br/>
-                  PloygonXY_3
-                  <input type="text" name= "PloygonCord_3X"  required> <input type="text" name= "PloygonCord_3Y"  required> <br/>
-                  PloygonXY_4
-                  <input type="text" name= "PloygonCord_4X"  required> <input type="text" name= "PloygonCord_4Y"  required> <br/>
-                  PloygonXY_5
-                  <input type="text" name= "PloygonCord_5X"  required> <input type="text" name= "PloygonCord_5Y"  required> <br/>
+                  Period FROM 
+                  <input type="date" name="periodfrom" min="1998-05-19" max="2021-09-31" required>
+                  <span class="validity"></span>
+                </label>
+                <label>
+                  Period To 
+                  <input type="date" name="periodto" min="1998-05-19" max="2021-09-31" required>
+                  <span class="validity"></span>
                 </label>
                 <button>Submit</button>
               </form>
+
+
+
 
               <p>TRMM Downloader</p>
               <form action='/download/trmmRT', method = 'POST'>

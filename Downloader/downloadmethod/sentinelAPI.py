@@ -5,8 +5,8 @@ from glob import glob
 
 class sentinelAPI:
     def API_info():
-        link = 'https://scihub.copernicus.eu/dhus'
+        #link = 'https://scihub.copernicus.eu/dhus'
         loginId = 'kannsky'
         password = 'dbsgur1004!'
 
-        return SentinelAPI(loginId, password, link)
+        return SentinelAPI(loginId, password)
