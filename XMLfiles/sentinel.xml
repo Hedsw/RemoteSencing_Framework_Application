@@ -3,8 +3,8 @@
 <Data>
     <Title>SENTINEL</Title>
     <Download>
-        <Hostname>https://apihub.copernicus.eu/apihub</Hostname>
+        <Hostname>https://scihub.copernicus.eu/dhus/</Hostname>
         <Userid>kannsky</Userid>
-        <Password>dbsgur1004!</Password>
+        <Password>dbsgur123</Password>
     </Download>
 </Data>

@@ -6,8 +6,8 @@ import urllib.request as urllib2
 import re,requests,wget,os,threading
 from bs4 import BeautifulSoup
 from xml.etree.ElementTree import parse
-from db_downloadinfo import dbdownloadtable
-from db_convertinfo import dbconverttable
+from db_downloadinfo import dbdownloadtable_insert
+from db_convertinfo import dbconverttable_insert
 
 # FILE LINK GET FROM XML
 class xmlcontroller:
@@ -48,7 +48,7 @@ class xmlcontroller:
         """
 
 # BRING FILE NAME FROM LINK 
-class filecontroller:
+class filecontroller_trmm:
     def filenamesget_trmm(url):
         #baseUrl = url_sample
         filenames = []
@@ -71,15 +71,17 @@ class filecontroller:
         
         for i in list_set:
             if xml not in i:
-                dbdownloadtable.dbinsertInfo(i, 'nc4')
+                dbdownloadtable_insert.dbinsertInfo(i, 'nc4')
                 tmp = str(i)
                 #print(tmp)
                 replaced = tmp.replace('nc4', 'tiff')
                 #print(replaced, ' <- Coverted ')
-                dbconverttable.dbinsertInfo(replaced, 'tiff')
+                dbconverttable_insert.dbinsertInfo(replaced, 'tiff')
                 filenames.append(i)
         return filenames
     
+    
+class filecontroller_mergedIR:
     def filenameget_mergedir(url, fromP, toP, monthfrom, monthto):
         filenames = []
         req = urllib2.Request(url)
@@ -146,18 +148,19 @@ class threadcontroller_mergedIR:
         return True
     
     
-class downloadClass:
+class downloadclass_nasa_trmm:
     def download_trmm(url):
-        filenames = filecontroller.filenamesget_trmm(url)
+        filenames = filecontroller_trmm.filenamesget_trmm(url)
         # print(filenames, "File Name")
         
         # 쓰레드 돌리려면 아래거 하면 됨 
         # DO NOT USE THIS THREAD WHEN YOU TEST CODE!!! IT WILL DOWNLOAD OVER HUNDREADS OF FILES SIMULTANEOUSLY!!!
-        #threadcontroller_trmmRT.threadrun_trmm(url, filenames)
+        threadcontroller_trmmRT.threadrun_trmm(url, filenames)
         
+class downloadclass_nasa_mergedir:
     def download_mergedir(url, fromY, toY, fromM, toM):
         try:
-            filenames = filecontroller.filenameget_mergedir(url, fromY, toY, fromM, toM)
+            filenames = filecontroller_mergedIR.filenameget_mergedir(url, fromY, toY, fromM, toM)
             #print(filenames, "FileName_mergedIR")
             period_ym = fromY + fromM
             
@@ -178,7 +181,7 @@ class downloadClass:
             print(filtered_filename)
             print(url)
             # DO NOT USE THIS THREAD WHEN YOU TEST CODE!!! IT WILL DOWNLOAD OVER HUNDREAD OF FILES SIMULTANEOUSLY!!!
-            #threadcontroller_mergedIR.threadrun_mergedir(url, filtered_filename)
+            threadcontroller_mergedIR.threadrun_mergedir(url, filtered_filename)
             return True 
         
         except OSError:

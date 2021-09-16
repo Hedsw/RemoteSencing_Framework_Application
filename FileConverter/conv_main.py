@@ -1,3 +1,6 @@
+# Abstract Method
+from abc import ABC, abstractmethod
+
 import sys,os,time,requests
 from glob import glob
 from flask import Flask, render_template, request
@@ -11,6 +14,91 @@ app.config["DEBUG"] = True
 def main():
     return render_template('index.html')
 
+class AbstractConverter(ABC):
+    @abstractmethod
+    def converter():
+        pass
+    
+"""
+    @abstractmethod
+    def dbstore():
+        pass
+"""
+class nasa_trmm_conv_API():
+    @app.route('/converter/tifftonc4', methods=['POST','GET'], endpoint = 'nasa_trmm_convert')
+    def nasa_trmm_convert():
+        if request.method == 'POST':
+            print("NASA_TRMMRT NC4 Converter POST Method starts")    
+            nasaTRMM_RT = nasa_trmm_converter()
+            nasaTRMM_RT.converter()
+            
+        # Once directly send message here, you can get access on GET
+        elif request.method == 'GET':    
+            print("NASA_TRMMRT NC4 Converter GET Method starts")    
+            nasaTRMM_RT = nasa_trmm_converter()
+            nasaTRMM_RT.converter()
+        return render_template('index.html')
+
+
+class nasa_mergedIR_conv_API():
+    @app.route('/converter/mergedIR', methods=['POST','GET'], endpoint = 'nasa_mergedIR_convert')
+    def nasa_mergedIR_convert():
+        if request.method == 'POST':
+            print("MergedIR NC4 Converter POST Method starts")    
+            nasaMergedIR = nasa_mergedir_converter()
+            nasaMergedIR.converter()
+            
+        # Once directly send message here, you can get access on GET
+        elif request.method == 'GET':    
+            print("MergedIR NC4 Converter GET Method starts")    
+            nasaMergedIR = nasa_mergedir_converter()
+            nasaMergedIR.converter()
+        return render_template('index.html')       
+
+
+class nasa_mergedir_converter(AbstractConverter):
+    def converter(self):
+        #print(response.text)
+        print("NC4 Converter POST Method starts")    
+
+        # This is CONVERTER WIHTOUT THREAD 
+        os.system('rm -rf ../storage/nc4file/*1')
+        lists = glob('../storage/nc4file/*.nc4')
+        for i in range(len(lists)):   
+            #fileconvert_class.nc4converter(i, lists)
+            #print(lists[i])
+            tmp = lists[i]
+            print(tmp.split('/'))
+            splited = tmp.split('/')
+            print(tmp, " Splited")
+            filename = splited[-1].split('.')
+            fileconvert_class.nc4converter(i, lists, filename[0])
+            
+        # THIS IS COVERTER WITH THREAD    
+        # When we use Thread, our virtual machine's power is not enough to run large amount of thread again.    
+        # ThreadNC4.threadstarter()
+        return render_template('index.html')
+            
+class nasa_trmm_converter(AbstractConverter):
+    def converter(self):
+        print("NC4 Converter POST Method starts")    
+
+        # This is CONVERTER WIHTOUT THREAD 
+        os.system('rm -rf ../storage/nc4file/*1')
+        lists = glob('../storage/nc4file/*.nc4')
+        for i in range(len(lists)):
+            tmp = lists[i]
+            splited = tmp.split('/')
+            #print(splited[-1], " Splited")
+            filename = splited[-1].split('.')
+            fileconvert_class.nc4converter(i, lists, filename[0])
+            
+        # THIS IS COVERTER WITH THREAD    
+        # When we use Thread, our virtual machine's power is not enough to run large amount of thread again.    
+        # ThreadNC4.threadstarter()
+        return render_template('index.html')
+
+"""
 class fileconverter:
     @app.route('/converter/tifftonc4', methods=['POST','GET'])
     def tiffconvtiff2nc4():
@@ -109,9 +197,7 @@ class fileconverter:
             #print("NC4 Starter GET Method")    
 
         return render_template('index.html')
-#Convert Port Number
+"""
+# Convert Port Number
+app.run(host='0.0.0.0', port=5003)
 
-app.run(host='0.0.0.0', port=5002)
-
-#1 Bash가 File Converter 5002
-#2 Bash가 File Downloader 5001

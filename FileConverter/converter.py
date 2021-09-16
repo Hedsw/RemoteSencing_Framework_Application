@@ -14,7 +14,7 @@ class fileconvert_class:
         try:
             os.system('mkdir ../storage/outputtif/%s' %i)
             os.system('gdal_translate -sds %s ../storage/outputtif/%s/output.tif' %(lists[i], i))
-            time.sleep(0.15)
+            time.sleep(0.3)
             os.system('gdal_merge.py -separate -o ../storage/outputtif/%s/final_output.tif ../storage/outputtif/%s/output*tif' %(i,i))
             os.system('mv ../storage/outputtif/%s/final_output.tif ../storage/geotiffiles/geotif_%s.tif' %(i,filename))
             #os.system('rm storage/geoTIFfile/%s/geoFiles/output*tif' %i)
@@ -31,8 +31,8 @@ class threadrunner:
             tmp = lists[i]
             splited = tmp.split('/')
             filename = splited[-1].split('.')
-            
-            processThread = threading.Thread(target=fileconvert_class.nc4converter, args=(i,lists, filename[0])) # parameters and functions have to be passed separately
+            # parameters and functions have to be passed separately
+            processThread = threading.Thread(target=fileconvert_class.nc4converter, args=(i,lists, filename[0]))
             processThread.start() # START THE THREAD
         return True
     #starter()

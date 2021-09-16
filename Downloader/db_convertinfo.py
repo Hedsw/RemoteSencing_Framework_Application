@@ -11,7 +11,7 @@ class dbopen:
         )
         return mydb
 
-class dbconverttable:
+class dbconverttable_insert:
     def dbinsertInfo(files, types): 
         mydb = dbopen.opendb()
      
@@ -44,6 +44,7 @@ class dbconverttable:
         
         # for db in db_cursor:
         # print(db)
+class dbconverttable_delete:
     def dbdeleteInfo(file, type):
         mydb = dbopen.opendb()
         db_cursor = mydb.cursor()

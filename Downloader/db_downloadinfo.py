@@ -11,10 +11,9 @@ class dbopen:
         )
         return mydb
 
-class dbdownloadtable:
+class dbdownloadtable_insert:
     def dbinsertInfo(files, types): 
         mydb = dbopen.opendb()
-     
         db_cursor = mydb.cursor()
         
         fileName = "filenametest.nc4"
@@ -44,6 +43,7 @@ class dbdownloadtable:
         
         # for db in db_cursor:
         # print(db)
+class dbdownloadtable_delete:
     def dbdeleteInfo(file, type):
         mydb = dbopen.opendb()
         db_cursor = mydb.cursor()
