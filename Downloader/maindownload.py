@@ -34,7 +34,6 @@ class AbstractDownloader(ABC):
     def downloadstatuschecker(signal):
         pass
   
-
 class nasa_mergedIR_API():
     @app.route('/download/mergedirTest', methods = ['GET', 'POST'], endpoint = 'downloadAPI_mergedIR_API')
     def downloadAPI_mergedIR_API():
@@ -80,28 +79,24 @@ class nasa_trmmRT_API():
 class copernicus_sentinel_1_API():
     @app.route('/download/sentinel1', methods =['GET', 'POST'], endpoint = 'downloadAPI_sentinel_1')
     def downloadAPI_sentinel_1():
-        try:
-            from_period = request.form['periodfrom']
-            to_period = request.form['periodto']
-            if request.method == 'POST':
-                print("POST Method")
-                #print(from_period, to_period, " Period is correctly Inserted")
-                sentinel1 = copernicus_sentinel_1()
-                # TO DO: X,Y 좌표 값 받지말고, 파일을 받는게 더 나을 듯
-                sentinel1.Sendtinel1_downloader(from_period, to_period)
-                
-            elif request.method == 'GET': # GET
-                print("GET Method")
-                #print(from_period, to_period, " Period is correctly Inserted")
+        from_period = request.form['periodfrom']
+        to_period = request.form['periodto']
+        if request.method == 'POST':
+            print("POST Method")
+            #print(from_period, to_period, " Period is correctly Inserted")
+            sentinel1 = copernicus_sentinel_1()
+            # TO DO: X,Y 좌표 값 받지말고, 파일을 받는게 더 나을 듯
+            sentinel1.Sendtinel1_downloader(from_period, to_period)
+            
+        elif request.method == 'GET': # GET
+            print("GET Method")
+            #print(from_period, to_period, " Period is correctly Inserted")
 
-                sentinel1 = copernicus_sentinel_1()
-                # TO DO: X,Y 좌표 값 받기
-                sentinel1.Sendtinel1_downloader(from_period, to_period)
-            else:
-                print("Wrong Communication Method")
-                
-        except OSError:
-            print("OS ERROR. Check your AWS EC2 Machine")
+            sentinel1 = copernicus_sentinel_1()
+            # TO DO: X,Y 좌표 값 받기
+            sentinel1.Sendtinel1_downloader(from_period, to_period)
+        else:
+            print("Wrong Communication Method")
             
         return render_template('index.html')
 
@@ -109,31 +104,29 @@ class copernicus_sentinel_1_API():
 class copernicus_sentinel_2_API():
     @app.route('/download/sentinel2', methods =['GET', 'POST'], endpoint = 'downloadAPI_sentinel_2')
     def downloadAPI_sentinel_2():
-        try:
-            from_period = request.form['periodfrom']
-            to_period = request.form['periodto']
-            if request.method == 'POST':
-                print("POST Method")
-                print(from_period, to_period, " Period is correctly Inserted")
-                sentinel2 = copernicus_sentinel_2
-                # TO DO: X,Y 좌표 값 받지말고, 파일을 받는게 더 나을 듯
-                sentinel2.Sendtinel2_downloader(from_period, to_period)
-                
-            elif request.method == 'GET': # GET
-                print("GET Method")
-                #print(from_period, to_period, " Period is correctly Inserted")
-
-                sentinel2 = copernicus_sentinel_2()
-                # TO DO: X,Y 좌표 값 받기
-                sentinel2.Sendtinel2_downloader(from_period, to_period)
-            else:
-                print("Wrong Communication Method")
-                
-        except OSError:
-            print("OS ERROR. Check your AWS EC2 Machine")
+#            from_period = request.form['periodfrom']
+#            to_period = request.form['periodto']
+        from_period = "20210901"
+        to_period = "20210909"
+        print(from_period, to_period, " <- Check Period")
+        if request.method == 'POST':
+            print("POST Method")
+            print(from_period, to_period, " Period is correctly Inserted")
+            sentinel2 = copernicus_sentinel_2()
+            # TO DO: X,Y 좌표 값 받지말고, 파일을 받는게 더 나을 듯
+            sentinel2.Sendtinel2_downloader(from_period, to_period)
             
-        return render_template('index.html')
+        elif request.method == 'GET': # GET
+            print("GET Method")
+            #print(from_period, to_period, " Period is correctly Inserted")
 
+            sentinel2 = copernicus_sentinel_2()
+            # TO DO: X,Y 좌표 값 받기
+            sentinel2.Sendtinel2_downloader(from_period, to_period)
+        else:
+            print("Wrong Communication Method")
+
+        return render_template('index.html')
 
 class copernicus_sentinel_2(AbstractDownloader):         
     def Sendtinel2_downloader(self, from_period, to_period):
@@ -143,11 +136,10 @@ class copernicus_sentinel_2(AbstractDownloader):
             print("Period is too long")
             return 
         """        
-        polydir = copernicus_sentinel_2.jsonparser("polygoninformation.json")
+        polydir = copernicus_sentinel_2.jsonparser("polygoninformation.geojson")
         copernicus_sentinel_2.printInfo(from_period, to_period)
         parsed_from_period, parsed_to_period = copernicus_sentinel_2.parser(from_period, to_period)
         print(parsed_from_period, parsed_to_period, " Parsed OK")
-        
         
         # Polygon File should be used to get GPS address. API Query is used to set options liks platformname, date, cloudcoverpercentage
         # To do.. Setting Day and Month // XYZ 
@@ -184,7 +176,7 @@ class copernicus_sentinel_2(AbstractDownloader):
         if signal == False:
             print("Downloading is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
         else:
-            print("Download is successful")
+            print("Process is sucessful. ")
     
     #Overriding
     def printInfo(fromP, toP):
@@ -195,9 +187,6 @@ class copernicus_sentinel_2(AbstractDownloader):
         #print(fromP, toP)
         return URL, fromP, toP
 
-
-
-
 class copernicus_sentinel_1(AbstractDownloader):         
     def Sendtinel1_downloader(self, from_period, to_period):
         
@@ -207,11 +196,10 @@ class copernicus_sentinel_1(AbstractDownloader):
             print("Period is too long")
             return 
         """        
-        polydir = copernicus_sentinel_1.jsonparser("polygoninformation.json")
+        polydir = copernicus_sentinel_1.jsonparser("polygoninformation.geojson")
         copernicus_sentinel_1.printInfo(from_period, to_period)
         parsed_from_period, parsed_to_period = copernicus_sentinel_1.parser(from_period, to_period)
         print(parsed_from_period, parsed_to_period, " Parsed OK")
-        
         
         # Polygon File should be used to get GPS address. API Query is used to set options liks platformname, date, cloudcoverpercentage
         # To do.. Setting Day and Month // XYZ 
@@ -248,7 +236,7 @@ class copernicus_sentinel_1(AbstractDownloader):
         if signal == False:
             print("Downloading is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
         else:
-            print("Download is successful")
+            print("Process is sucessful. ")
     
     #Overriding
     def printInfo(fromP, toP):
@@ -266,9 +254,9 @@ class copernicus_sentinel_1(AbstractDownloader):
 class copernicus_sentinel_2(AbstractDownloader):
     @app.route('/download/sentinel2', methods =['GET', 'POST'])
     def Sendtinel2_downloader():
-        typechecker = classifier("API", "polygoninformation.json")
+        typechecker = classifier("API", "polygoninformation.geoson")
         print(typechecker.downloadmethod)
-        polydir = parser.parse_sentinel("polygoninformation.json")
+        polydir = parser.parse_sentinel("polygoninformation.geojson")
         # Polygon File should be used to get GPS address. API Query is used to set options liks platformname, date, cloudcoverpercentage
         if request.method == 'POST':
             sentinel2.sentinel_2(polydir)

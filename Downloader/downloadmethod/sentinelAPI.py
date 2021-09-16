@@ -3,10 +3,10 @@ from sentinelsat import SentinelAPI, read_geojson, geojson_to_wkt
 from datetime import date
 from glob import glob
 
-class sentinelAPI:
-    def API_info():
-        #link = 'https://scihub.copernicus.eu/dhus'
+class API:
+    def info():
+        link = 'https://apihub.copernicus.eu/apihub'
         loginId = 'kannsky'
         password = 'dbsgur1004!'
 
-        return SentinelAPI(loginId, password)
+        return SentinelAPI(loginId, password, link)

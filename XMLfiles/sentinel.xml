@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Data>
+    <Title>SENTINEL</Title>
+    <Download>
+        <Hostname>https://apihub.copernicus.eu/apihub</Hostname>
+        <Userid>kannsky</Userid>
+        <Password>dbsgur1004!</Password>
+    </Download>
+</Data>
