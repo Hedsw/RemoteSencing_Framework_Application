@@ -1,14 +1,34 @@
 import mysql.connector
+from xml.etree.ElementTree import parse
 
 class dbopen:
     def opendb():
+        tree = parse('../XMLfiles/db.xml')
+        root = tree.getroot()
+        data= root.findall("DATA")
+        user = [x.findtext("User") for x in data]
+        pw = [x.findtext("Password") for x in data]
+        
+        user = str(user)
+        pw = str(pw)
+        
         mydb = mysql.connector.connect(
         host="0.0.0.0",
-        user="root",
-        password="dbsGUR123@#",
+        user=user[0],
+        password=pw[0],
         database="mysql",
         auth_plugin='mysql_native_password'
         )
+        
+        """
+        mydb = mysql.connector.connect(
+        host="0.0.0.0",
+        user='root',
+        password='dbsGUR123@#',
+        database="mysql",
+        auth_plugin='mysql_native_password'
+        )
+        """
         return mydb
 
 class dbdownloadtable_insert:

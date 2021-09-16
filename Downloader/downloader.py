@@ -25,14 +25,12 @@ class xmlcontroller:
         tree = parse('../XMLfiles/merged_ir.xml')
         root = tree.getroot()
         merged_ir = root.findall("DATA")
-        
         year = [x.findtext("YEAR") for x in merged_ir]
         
         # types = [x.findtext("TYPES") for x in trmm]
         # year = [x.findtext("START_YEAR") for x in trmm]
         #print(year)
         find_year_link = [x.findtext("LINK") for x in merged_ir]
-        
         return find_year_link[0]
         
         """ # 

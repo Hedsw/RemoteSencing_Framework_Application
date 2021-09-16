@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<databse>
+    <DATA>
+        <User>root</User>
+        <Password>dbsGUR123@#</Password>
+        <db>mysql</db>
+    </DATA>
+</databse>
+
