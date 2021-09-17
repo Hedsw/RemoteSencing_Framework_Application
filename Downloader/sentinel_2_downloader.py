@@ -5,7 +5,7 @@ from sentinelsat import SentinelAPI, read_geojson, geojson_to_wkt
 from datetime import date
 from glob import glob
 from xml.etree.ElementTree import parse
-from downloadmethod.sentinelAPI import API
+#from downloadmethod.sentinelAPI import API
 from filechecker.zipreleaser import unzipper
 import pandas as pd
 

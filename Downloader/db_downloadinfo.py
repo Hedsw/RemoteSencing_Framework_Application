@@ -11,7 +11,7 @@ class dbopen:
         
         user = str(user)
         pw = str(pw)
-        
+        """
         mydb = mysql.connector.connect(
         host="0.0.0.0",
         user=user[0],
@@ -28,7 +28,6 @@ class dbopen:
         database="mysql",
         auth_plugin='mysql_native_password'
         )
-        """
         return mydb
 
 class dbdownloadtable_insert:

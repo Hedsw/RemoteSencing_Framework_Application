@@ -4,7 +4,7 @@ from sentinelsat import SentinelAPI, read_geojson, geojson_to_wkt
 from datetime import date
 from glob import glob
 from xml.etree.ElementTree import parse
-from downloadmethod.sentinelAPI import API
+#from downloadmethod.sentinelAPI import API
 from filechecker.zipreleaser import unzipper
 
 class sentinel1:
@@ -54,7 +54,6 @@ class sentinel1:
 #        products_df_sorted = products_df_sorted.head(5)
         # API Reference -> download_all(products, directory_path=’.’, max_attempts=10, checksum=True, n_concurrent_dl=None, lta_retry_delay=None, fail_fast=False, nodefilter=None)
         api.download_all(products, "../storage/sentinelfiles/", 10, True, 4)
-        
             
         """
         # convert to Pandas DataFrame

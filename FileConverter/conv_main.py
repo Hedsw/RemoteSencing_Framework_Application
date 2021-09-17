@@ -14,29 +14,45 @@ app.config["DEBUG"] = True
 def main():
     return render_template('index.html')
 
+class Context:
+    def __init__(self, strategy):
+        self._strategy = strategy
+        
+    def converter(self):
+        self._strategy.converter()
+
 class AbstractConverter(ABC):
     @abstractmethod
     def converter():
         pass
-    
+
 """
     @abstractmethod
     def dbstore():
         pass
 """
 class nasa_trmm_conv_API():
-    @app.route('/converter/tifftonc4', methods=['POST','GET'], endpoint = 'nasa_trmm_convert')
+    @app.route('/converter/trmm', methods=['POST','GET'], endpoint = 'nasa_trmm_convert')
     def nasa_trmm_convert():
         if request.method == 'POST':
             print("NASA_TRMMRT NC4 Converter POST Method starts")    
-            nasaTRMM_RT = nasa_trmm_converter()
-            nasaTRMM_RT.converter()
+            #nasaTRMM_RT = nasa_trmm_converter()
+            #nasaTRMM_RT.converter()
+            
+            trmm = Context(nasa_trmm_converter())
+            trmm.converter()
+            
             
         # Once directly send message here, you can get access on GET
         elif request.method == 'GET':    
             print("NASA_TRMMRT NC4 Converter GET Method starts")    
+            """
             nasaTRMM_RT = nasa_trmm_converter()
             nasaTRMM_RT.converter()
+            """
+            context = Context(nasa_trmm_converter())
+            context.converter()
+            
         return render_template('index.html')
 
 
@@ -45,14 +61,24 @@ class nasa_mergedIR_conv_API():
     def nasa_mergedIR_convert():
         if request.method == 'POST':
             print("MergedIR NC4 Converter POST Method starts")    
+            """
             nasaMergedIR = nasa_mergedir_converter()
             nasaMergedIR.converter()
+            """
+            merged = Context(nasa_mergedir_converter())
+            merged.converter()
             
         # Once directly send message here, you can get access on GET
         elif request.method == 'GET':    
             print("MergedIR NC4 Converter GET Method starts")    
+            """
             nasaMergedIR = nasa_mergedir_converter()
             nasaMergedIR.converter()
+            """
+            
+            merged = Context(nasa_mergedir_converter())
+            merged.converter()
+            
         return render_template('index.html')       
 
 
