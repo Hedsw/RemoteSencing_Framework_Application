@@ -17,24 +17,24 @@ app.config["DEBUG"] = True
 @app.route('/', methods=['GET'])
 def main():
     return render_template('index.html')
+# https://dev.to/takaakit/uml-diagram-for-gof-design-pattern-examples-in-python-4j40#strategy
 
 class Context:
+    #strategy: AbstractDownloader 
+    
     def __init__(self, strategy):
         self._strategy = strategy
     #strategy: Strategy  ## the strategy interface
-    
-    def download(self, from_period, to_period, url):
+    def _setdownload(self, from_period, to_period, url):
         self._strategy.download(from_period, to_period, url)
-    
-    def parser(self, period1, period2):
+    """
+    def _setparser(self, period1, period2):
         self._strategy.parser(period1, period2)
-        
-    def printInfo(self, fromP, toP):
+    def _setprintInfo(self, fromP, toP):
         self._strategy.printInfo(fromP, toP)
-    
-    def downloadstatuschecker(self):
+    def _setdownloadstatuschecker(self):
         self._strategy.downloadstatuschecker()
-
+    """
 
 class AbstractDownloader(ABC):
     # 타입 체커 하나 더 넣으면 좋을듯.. 그리고... 마이크로서비스 하나 더 만들어서 총 3개 운영해야 함.. 하나는 어답터 나머지 두개는 다운로더, 컨버터 이렇게
@@ -66,7 +66,7 @@ class nasa_trmmRT_API():
                 url = ""
                 #concrete_strategy = nasa_trmmRT_downloader()
                 context = Context(nasa_trmmRT_downloader())
-                context.download(from_period, to_period, url)
+                context._setdownload(from_period, to_period, url)
                 
             else:
                 print("GET")
@@ -79,8 +79,8 @@ class nasa_trmmRT_API():
 
 
 class nasa_mergedIR_API():
-    @app.route('/download/mergedir', methods = ['GET', 'POST'], endpoint = 'downloadAPI_mergedIR_API')
-    def downloadAPI_mergedIR_API():
+    @app.route('/download/mergedir', methods = ['GET', 'POST'], endpoint = 'downloadAPI_mergedIR')
+    def downloadAPI_mergedIR():
         try:
             if request.method == 'POST':
                 # Sub Class
@@ -90,7 +90,7 @@ class nasa_mergedIR_API():
                 to_period = request.form['periodto']
                 lists = request.form['lists']
                 context = Context(nasa_mergedIR_downloader())
-                context.download(from_period, to_period, lists)
+                context._setdownload(from_period, to_period, lists)
                 
             else:
                 print("GET")
@@ -278,7 +278,7 @@ class copernicus_sentinel_1_API():
             lists = ""
             # TO DO: X,Y 좌표 값 받지말고, 파일을 받는게 더 나을 듯
             context = Context(copernicus_sentinel_1())
-            context.download(from_period, to_period, lists)
+            context._setdownload(from_period, to_period, lists)
             
             
         elif request.method == 'GET': # GET
@@ -292,7 +292,7 @@ class copernicus_sentinel_1_API():
             """
             # TO DO: X,Y 좌표 값 받지말고, 파일을 받는게 더 나을 듯
             context = Context(copernicus_sentinel_1())
-            context.download(from_period, to_period, lists)
+            context._setdownload(from_period, to_period, lists)
         else:
             print("Wrong Communication Method")
             
@@ -317,7 +317,7 @@ class copernicus_sentinel_2_API():
             # TO DO: X,Y 좌표 값 받지말고, 파일을 받는게 더 나을 듯s
             context = Context(copernicus_sentinel_2())
             lists = ""
-            context.download(from_period, to_period, lists)
+            context._setdownload(from_period, to_period, lists)
             
         elif request.method == 'GET': # GET
             print("GET Method")
@@ -329,7 +329,7 @@ class copernicus_sentinel_2_API():
             """
             context = Context(copernicus_sentinel_2())
             lists = ""
-            context.download(from_period, to_period, lists)
+            context._setdownload(from_period, to_period, lists)
             
         else:
             print("Wrong Communication Method")
