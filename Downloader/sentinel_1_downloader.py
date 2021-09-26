@@ -12,9 +12,9 @@ class sentinel1:
         filenames = []
         tree = parse('../XMLfiles/sentinel.xml')
         root = tree.getroot()
-        getINFO = root.findall("Download")
-        USERID = [x.findtext("Userid") for x in getINFO]
-        PASSWORD = [x.findtext("Password") for x in getINFO]
+        getINFO = root.findall("DOWNLOAD")
+        USERID = [x.findtext("USERID") for x in getINFO]
+        PASSWORD = [x.findtext("PASSWORD") for x in getINFO]
         USERID = str(USERID[0])
         PASSWORD = str(PASSWORD[0])
         #print(type(USERID), type(PASSWORD) , " What is typed?")

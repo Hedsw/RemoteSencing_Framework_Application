@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Data>
+<DATA>
     <Title>SENTINEL</Title>
-    <Download>
-        <Hostname>https://scihub.copernicus.eu/dhus/</Hostname>
-        <Userid>kannsky</Userid>
-        <Password>dbsgur123</Password>
-    </Download>
-</Data>
+    <DOWNLOAD>
+        <LINK>https://scihub.copernicus.eu/dhus/</LINK>
+        <USERID>kannsky</USERID>
+        <PASSWORD>dbsgur123</PASSWORD>
+    </DOWNLOAD>
+</DATA>

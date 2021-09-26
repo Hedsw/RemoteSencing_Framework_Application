@@ -15,10 +15,10 @@ class sentinel2:
         filenames = []
         tree = parse('../XMLfiles/sentinel.xml')
         root = tree.getroot()
-        getINFO = root.findall("Download")
+        getINFO = root.findall("DOWNLOAD")
         #USERID = getINFO.find("Userid")
-        USERID = [x.findtext("Userid") for x in getINFO]
-        PASSWORD = [x.findtext("Password") for x in getINFO]
+        USERID = [x.findtext("USERID") for x in getINFO]
+        PASSWORD = [x.findtext("PASSWORD") for x in getINFO]
         #LINK = [x.findtext("Hostname") for x in getINFO]
         USERID = str(USERID[0])
         PASSWORD = str(PASSWORD[0])
