@@ -18,7 +18,7 @@ class Context:
     def __init__(self, strategy):
         self._strategy = strategy
         
-    def converter(self):
+    def _setconverter(self):
         self._strategy.converter()
 
 class AbstractConverter(ABC):
@@ -40,7 +40,7 @@ class nasa_trmm_conv_API():
             #nasaTRMM_RT.converter()
             
             trmm = Context(nasa_trmm_converter())
-            trmm.converter()
+            trmm._setconverter()
             
             
         # Once directly send message here, you can get access on GET
@@ -51,7 +51,7 @@ class nasa_trmm_conv_API():
             nasaTRMM_RT.converter()
             """
             context = Context(nasa_trmm_converter())
-            context.converter()
+            context._setconverter()
             
         return render_template('index.html')
 
@@ -66,7 +66,7 @@ class nasa_mergedIR_conv_API():
             nasaMergedIR.converter()
             """
             merged = Context(nasa_mergedir_converter())
-            merged.converter()
+            merged._setconverter()
             
         # Once directly send message here, you can get access on GET
         elif request.method == 'GET':    
@@ -77,7 +77,7 @@ class nasa_mergedIR_conv_API():
             """
             
             merged = Context(nasa_mergedir_converter())
-            merged.converter()
+            merged._setconverter()
             
         return render_template('index.html')       
 

@@ -19,7 +19,7 @@ def main():
     return render_template('index.html')
 # https://dev.to/takaakit/uml-diagram-for-gof-design-pattern-examples-in-python-4j40#strategy
 
-class Context:
+class Context():
     #strategy: AbstractDownloader 
     
     def __init__(self, strategy):
@@ -27,14 +27,13 @@ class Context:
     #strategy: Strategy  ## the strategy interface
     def _setdownload(self, from_period, to_period, url):
         self._strategy.download(from_period, to_period, url)
-    """
     def _setparser(self, period1, period2):
         self._strategy.parser(period1, period2)
     def _setprintInfo(self, fromP, toP):
         self._strategy.printInfo(fromP, toP)
-    def _setdownloadstatuschecker(self):
-        self._strategy.downloadstatuschecker()
-    """
+    def _setdownloadstatuschecker(self, signal):
+        self._strategy.downloadstatuschecker(signal)
+        
 
 class AbstractDownloader(ABC):
     # 타입 체커 하나 더 넣으면 좋을듯.. 그리고... 마이크로서비스 하나 더 만들어서 총 3개 운영해야 함.. 하나는 어답터 나머지 두개는 다운로더, 컨버터 이렇게
@@ -84,47 +83,80 @@ class nasa_mergedIR_API():
         try:
             if request.method == 'POST':
                 # Sub Class
-                print("GET POST")
-                
+                print("POST")
                 from_period = request.form['periodfrom']
                 to_period = request.form['periodto']
                 lists = request.form['lists']
+                print(from_period, to_period, lists, " Work?")
                 context = Context(nasa_mergedIR_downloader())
-                context._setdownload(from_period, to_period, lists)
-                
+                context._setprintInfo(from_period, to_period)
+                url = ""
+                signal = context._setdownload(from_period, to_period, url)
+                context._setdownloadstatuschecker(signal)
             else:
                 print("GET")
-                pass        
-        
+                pass     
+            
         except OSError:
-            print("OS ERORR. Check your AWS EC2 machine ")
+            print("OS Error")
             
         return render_template('index.html')
 
+# https://www.gleek.io/blog/class-diagram-arrows.html
 
 class nasa_mergedIR_downloader(AbstractDownloader):
     def download(self, from_period, to_period, url):
         try:
-                if nasa_mergedIR_downloader.printInfo(from_period, to_period) is None:
-                    print("Invalid URL")
-                    return False
-                yearfrom, monthfrom, yearto, monthto, url = nasa_mergedIR_downloader.parser(from_period, to_period)
-                
-                print(yearfrom, monthfrom, yearto, monthto, url)
-                # To Run download... 다운로드 돌리려면 아래꺼 실행..
-                signal = downloadclass_nasa_mergedir.download_mergedir(url, yearfrom, yearto, monthfrom, monthto)
-                nasa_mergedIR_downloader.downloadstatuschecker(signal)
-                
-                #여기까지가 이제 URL을 가져온거고.. 그 다음부터는.. 뒤에 슬러쉬 슬러쉬 붙이면서 가야함.. 마지막에
-                # URL 들어왔을 때. https://disc2.gesdisc.eosdis.nasa.gov/data/MERGED_IR/GPM_MERGIR.1/2008/347/merg_2008121200_4km-pixel.nc4
-                # 이런식으로 들어온다 하면... 뒤에 부분 파싱 해야함. 2008이 있는지.. 01이 있는지..이런식으로 연, 달 별로 파싱 해서 다운로드 시작해야함
-                
+            tmp1 = from_period.split('-')
+            tmp2 = to_period.split('-')
+            # year and month return
+            yearfrom, monthfrom, yearto, monthto = tmp1[0], tmp1[1], tmp2[0], tmp2[1]
+            
+            if yearfrom == None or yearto == None:
+                print("invalid Period")
+            tree = parse('../XMLfiles/merged_ir.xml')
+            root = tree.getroot()
+            merged_ir = root.findall("DATA")
+            year = [x.findtext("YEAR") for x in merged_ir]
+            
+            # types = [x.findtext("TYPES") for x in trmm]
+            # year = [x.findtext("START_YEAR") for x in trmm]
+            #print(year)
+            url = [x.findtext("LINK") for x in merged_ir]
+            yearcount = int(yearto) - int(yearfrom)
+
+            # 1998 + yearcount + 1 
+            for i in range(0, yearcount+1):
+                for j in range(1, 2):
+                    url = xmlcontroller.xml_merged_ir_file(yearfrom, yearto)
+                    url = str(url)
+                    tmp_year = int(yearfrom) + i
+                    if j < 10: # 0 ~ 9
+                        j = "00" + str(j)
+                        url += str(tmp_year) + "/" + str(j)
+                    elif j > 9 and j < 100: # 10 ~ 99
+                        j = "0" + str(j)
+                        url += str(tmp_year) + "/" + str(j)
+                    print(url)
+            downloadclass_nasa_mergedir.download_mergedir(url, yearfrom, yearto, monthfrom, monthto)
+            #yearfrom, monthfrom, yearto, monthto, url = nasa_mergedIR_downloader.parser(from_period, to_period)
+
+            #context = Context(nasa_mergedIR_downloader())
+            #yearfrom, monthfrom, yearto, monthto, url = context._setparser(from_period, to_period)
+            #print(yearfrom, monthfrom, yearto, monthto, url)
+            # To Run download... 다운로드 돌리려면 아래꺼 실행..
+            #signal = downloadclass_nasa_mergedir.download_mergedir(url, yearfrom, yearto, monthfrom, monthto)
+            #nasa_mergedIR_downloader.downloadstatuschecker(signal)
+            
+            #여기까지가 이제 URL을 가져온거고.. 그 다음부터는.. 뒤에 슬러쉬 슬러쉬 붙이면서 가야함.. 마지막에
+            # URL 들어왔을 때. https://disc2.gesdisc.eosdis.nasa.gov/data/MERGED_IR/GPM_MERGIR.1/2008/347/merg_2008121200_4km-pixel.nc4
+            # 이런식으로 들어온다 하면... 뒤에 부분 파싱 해야함. 2008이 있는지.. 01이 있는지..이런식으로 연, 달 별로 파싱 해서 다운로드 시작해야함     
         except OSError:
             print("OS Error")
         return render_template('index.html')
     
     #Overriding
-    def parser(from_period, to_period):
+    def parser(self, from_period, to_period):
         tmp1 = from_period.split('-')
         tmp2 = to_period.split('-')
         # year and month return
@@ -145,10 +177,17 @@ class nasa_mergedIR_downloader(AbstractDownloader):
                     j = "0" + str(j)
                     url += str(tmp_year) + "/" + str(j)
                 print(url)
-        return yearfrom, monthfrom, yearto, monthto, url
+        _tmp = []
+        _tmp.append(yearfrom)
+        _tmp.append(monthfrom)
+        _tmp.append(yearto)
+        _tmp.append(monthto)
+        _tmp.append(url)
+        #return tuple(_tmp)
+        return "Test"
     
         #Overriding
-    def printInfo(fromP, toP):
+    def printInfo(self, fromP, toP):
         if fromP == None or toP == None:
             print("invalid Period")
             return False
@@ -160,11 +199,13 @@ class nasa_mergedIR_downloader(AbstractDownloader):
         # types = [x.findtext("TYPES") for x in trmm]
         # year = [x.findtext("START_YEAR") for x in trmm]
         #print(year)
-        find_year_link = [x.findtext("LINK") for x in merged_ir]
+        self.find_year_link = [x.findtext("LINK") for x in merged_ir]
+        print(self.find_year_link , " <- URL ")
         
-        return find_year_link[0]
+        
+        #return self.find_year_link[0]
     
-    def downloadstatuschecker(signal):
+    def downloadstatuschecker(self, signal):
         if signal == False:
             print("Downloading is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
         else:
@@ -459,7 +500,7 @@ class copernicus_sentinel_2(AbstractDownloader):
         return URL, fromP, toP
 
 # Here is Download Port Number
-app.run(host='0.0.0.0', port=5001)   
+app.run(host='0.0.0.0', port=5005)   
 
 
 
