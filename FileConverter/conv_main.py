@@ -21,16 +21,18 @@ class Context:
     def _setconverter(self):
         self._strategy.converter()
 
+    def _setdbinsert(self):
+        self._strategy.dbinsert()
+
 class AbstractConverter(ABC):
     @abstractmethod
     def converter():
         pass
 
-"""
     @abstractmethod
-    def dbstore():
+    def dbinsert():
         pass
-"""
+
 class nasa_trmm_conv_API():
     @app.route('/converter/trmm', methods=['POST','GET'], endpoint = 'nasa_trmm_convert')
     def nasa_trmm_convert():
@@ -104,6 +106,8 @@ class nasa_mergedir_converter(AbstractConverter):
         # When we use Thread, our virtual machine's power is not enough to run large amount of thread again.    
         # ThreadNC4.threadstarter()
         return render_template('index.html')
+    def dbinsert(self):
+        pass
             
 class nasa_trmm_converter(AbstractConverter):
     def converter(self):
@@ -123,6 +127,9 @@ class nasa_trmm_converter(AbstractConverter):
         # When we use Thread, our virtual machine's power is not enough to run large amount of thread again.    
         # ThreadNC4.threadstarter()
         return render_template('index.html')
+    
+    def dbinsert(self):
+        pass
 
 """
 class fileconverter:

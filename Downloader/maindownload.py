@@ -30,8 +30,9 @@ class Context():
         self._strategy.printInfo(fromP, toP)
     def _setdownloadstatuschecker(self, signal):
         self._strategy.downloadstatuschecker(signal)
+    def _setdbInsert(self):
+        self._strategy.dbinsert()
         
-
 class AbstractDownloader(ABC):
     # 타입 체커 하나 더 넣으면 좋을듯.. 그리고... 마이크로서비스 하나 더 만들어서 총 3개 운영해야 함.. 하나는 어답터 나머지 두개는 다운로더, 컨버터 이렇게
     @abstractmethod
@@ -44,6 +45,10 @@ class AbstractDownloader(ABC):
     
     @abstractmethod
     def downloadstatuschecker(signal):
+        pass
+    
+    @abstractmethod
+    def dbinsert():
         pass
 
 class nasa_mergedIR_API():
@@ -65,7 +70,6 @@ class nasa_mergedIR_API():
             else:
                 print("GET")
                 pass     
-            
         except OSError:
             print("OS Error")
             
@@ -181,12 +185,8 @@ class copernicus_sentinel_2_API():
 
 class copernicus_sentinel_2(AbstractDownloader):         
     def download(self, from_period, to_period, url):
- 
         polydir = copernicus_sentinel_2.jsonparser("polygoninformation.geojson")
-        #copernicus_sentinel_2.printInfo(from_period, to_period)
-        #parsed_from_period, parsed_to_period = copernicus_sentinel_2.parser(from_period, to_period)
-        #print(parsed_from_period, parsed_to_period, " Parsed OK")
-        
+
         # Polygon File should be used to get GPS address. API Query is used to set options liks platformname, date, cloudcoverpercentage
         # To do.. Setting Day and Month // XYZ 
         # 유저보고 파일 업로드하게 시키는 것이 더 빠를 듯.. 그리고 Data-Month는 HTML을 통해서 입력 받고.. 
@@ -223,17 +223,14 @@ class copernicus_sentinel_2(AbstractDownloader):
         print(link, " <-- Target URL")
         #return link[0]
         print("URL ", link, "FROM Period", fromP, "To Period", toP)
+    
+    #Overriding    
+    def dbinsert(self):
+        pass
 
 
 class copernicus_sentinel_1(AbstractDownloader):         
-    def download(self, from_period, to_period, url):
-    #def Sendtinel1_downloader(self, from_period, to_period):
-        """
-        parse_status = copernicus_sentinel_1.parser(from_period, to_period)
-        if parse_status == False:
-            print("Period is too long")
-            return 
-        """        
+    def download(self, from_period, to_period, url):    
         polydir = copernicus_sentinel_1.jsonparser("polygoninformation.geojson")
         #copernicus_sentinel_1.printInfo(from_period, to_period)
         #parsed_from_period, parsed_to_period = copernicus_sentinel_1.parser(from_period, to_period)
@@ -244,8 +241,6 @@ class copernicus_sentinel_1(AbstractDownloader):
         # 유저보고 파일 업로드하게 시키는 것이 더 빠를 듯.. 그리고 Data-Month는 HTML을 통해서 입력 받고.. 
         signal = sentinel1.sentinel_1(polydir, from_period, to_period)
         print(signal, " Sentinel-1 Name")
-        #copernicus_sentinel_1.downloadstatuschecker(signal)
-        
         return render_template('index.html')
     
     def jsonparser(json):
@@ -276,9 +271,11 @@ class copernicus_sentinel_1(AbstractDownloader):
         print(link, " <-- Target URL")
         #return link[0]
         print("URL ", link, "FROM Period", fromP, "To Period", toP)
-        
-        #return URL, fromP, toP
 
+    #Overriding    
+    def dbinsert(self):
+        pass
+        
 
 # https://www.gleek.io/blog/class-diagram-arrows.html
 class nasa_trmmRT_downloader(AbstractDownloader):
@@ -363,8 +360,12 @@ class nasa_trmmRT_downloader(AbstractDownloader):
             print("Downloading is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
         else:
             print("Download is successful")
+    
+    
+    #Overriding    
+    def dbinsert(self):
+        pass
      
-
 class nasa_mergedIR_downloader(AbstractDownloader):
     def download(self, from_period, to_period, url):
         try:
@@ -380,9 +381,6 @@ class nasa_mergedIR_downloader(AbstractDownloader):
             merged_ir = root.findall("DATA")
             year = [x.findtext("YEAR") for x in merged_ir]
             
-            # types = [x.findtext("TYPES") for x in trmm]
-            # year = [x.findtext("START_YEAR") for x in trmm]
-            #print(year)
             url = [x.findtext("LINK") for x in merged_ir]
             yearcount = int(yearto) - int(yearfrom)
 
@@ -418,9 +416,6 @@ class nasa_mergedIR_downloader(AbstractDownloader):
         merged_ir = root.findall("DATA")
         year = [x.findtext("YEAR") for x in merged_ir]
         
-        # types = [x.findtext("TYPES") for x in trmm]
-        # year = [x.findtext("START_YEAR") for x in trmm]
-        #print(year)
         self.find_year_link = [x.findtext("LINK") for x in merged_ir]
         print(self.find_year_link , " <- URL ")
         return self.find_year_link[0]
@@ -430,8 +425,10 @@ class nasa_mergedIR_downloader(AbstractDownloader):
             print("Downloading is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
         else:
             print("Download is successful")
-
-
+            
+    #Overriding    
+    def dbinsert(self):
+        pass
 
 # Here is Download Port Number
 app.run(host='0.0.0.0', port=5005)   
