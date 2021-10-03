@@ -23,15 +23,26 @@ class Context():
     #strategy: AbstractDownloader 
     def __init__(self, strategy):
         self._strategy = strategy
+        
     #strategy: Strategy  ## the strategy interface
-    def _setdownload(self, from_period, to_period, url):
+    def do_commonlogic_download(self, from_period, to_period, url):
         self._strategy.download(from_period, to_period, url)
-    def _setprintInfo(self, fromP, toP):
-        self._strategy.printInfo(fromP, toP)
-    def _setdownloadstatuschecker(self, signal):
+        
+    def do_commonlogic_printInfo(self, fromP, toP):
+        print("URL, ID and Password are described in below")
+        self._strategy.printInfo(fromP, toP) 
+        print("Printinfo function is finished")
+        #self._strategy.printInfo(fromP, toP)
+        
+    def do_commonlogic_downloadstatuschecker(self, signal):
+        print("Download Status Checker is in processing.. ")
         self._strategy.downloadstatuschecker(signal)
-    def _setdbInsert(self):
+        print("Download Status Checker is finished")
+
+    def do_commonlogic_dbInsert(self):
+        print("DB Insert function is in processing ")
         self._strategy.dbinsert()
+        print("DB Insert function is finished")
         
 class AbstractDownloader(ABC):
     # 타입 체커 하나 더 넣으면 좋을듯.. 그리고... 마이크로서비스 하나 더 만들어서 총 3개 운영해야 함.. 하나는 어답터 나머지 두개는 다운로더, 컨버터 이렇게
@@ -64,9 +75,9 @@ class nasa_mergedIR_API():
                 lists = request.form['lists']
                 print(from_period, to_period, lists, " Work?")
                 context = Context(nasa_mergedIR_downloader())
-                context._setprintInfo(from_period, to_period)
-                signal = context._setdownload(from_period, to_period, url)
-                context._setdownloadstatuschecker(signal)
+                context.do_commonlogic_printInfo(from_period, to_period)
+                signal = context.do_commonlogic_download(from_period, to_period, url)
+                context.do_commonlogic_downloadstatuschecker(signal)
             else:
                 print("GET")
                 pass     
@@ -86,9 +97,9 @@ class nasa_trmmRT_API():
                 url = ""
                 print(from_period, to_period, " Work?")
                 context = Context(nasa_trmmRT_downloader())
-                context._setprintInfo(from_period, to_period)
-                signal = context._setdownload(from_period, to_period, url)
-                context._setdownloadstatuschecker(signal)
+                context.do_commonlogic_printInfo(from_period, to_period)
+                signal = context.do_commonlogic_download(from_period, to_period, url)
+                context.do_commonlogic_downloadstatuschecker(signal)
             else:
                 print("GET")
                 pass
@@ -112,9 +123,9 @@ class copernicus_sentinel_1_API():
             parse_to = to_period.replace('-', '')
                         
             context = Context(copernicus_sentinel_1())
-            context._setprintInfo(parse_from, parse_to)
-            signal = context._setdownload(parse_from, parse_to, lists)
-            context._setdownloadstatuschecker(signal)
+            context.do_commonlogic_printInfo(parse_from, parse_to)
+            signal = context.do_commonlogic_download(parse_from, parse_to, lists)
+            context.do_commonlogic_downloadstatuschecker(signal)
 
             if len(parse_from) != len(parse_to):
                 print("Period Information is wrong.. ", parse_from, parse_to)
@@ -128,9 +139,9 @@ class copernicus_sentinel_1_API():
             parse_to = to_period.replace('-', '')
                         
             context = Context(copernicus_sentinel_1())
-            context._setprintInfo(parse_from, parse_to)
-            signal = context._setdownload(parse_from, parse_to, lists)
-            context._setdownloadstatuschecker(signal)
+            context.do_commonlogic_printInfo(parse_from, parse_to)
+            signal = context.do_commonlogic_download(parse_from, parse_to, lists)
+            context.do_commonlogic_downloadstatuschecker(signal)
 
             if len(parse_from) != len(parse_to):
                 print("Period Information is wrong.. ", parse_from, parse_to)
@@ -160,9 +171,9 @@ class copernicus_sentinel_2_API():
             # TO DO: X,Y 좌표 값 받지말고, 파일을 받는게 더 나을 듯s
             context = Context(copernicus_sentinel_2())
             lists = ""
-            context._setprintInfo(from_period, to_period)
-            signal = context._setdownload(from_period, to_period, lists)
-            context._setdownloadstatuschecker(signal)
+            context.do_commonlogic_printInfo(from_period, to_period)
+            signal = context.do_commonlogic_download(from_period, to_period, lists)
+            context.do_commonlogic_downloadstatuschecker(signal)
             
         elif request.method == 'GET': # GET
             print("GET Method")
@@ -174,9 +185,9 @@ class copernicus_sentinel_2_API():
             """
             context = Context(copernicus_sentinel_2())
             lists = ""
-            context._setprintInfo(from_period, to_period)
-            signal = context._setdownload(from_period, to_period, lists)
-            context._setdownloadstatuschecker(signal)
+            context.do_commonlogic_printInfo(from_period, to_period)
+            signal = context.do_commonlogic_download(from_period, to_period, lists)
+            context.do_commonlogic_downloadstatuschecker(signal)
             
         else:
             print("Wrong Communication Method")
@@ -206,9 +217,11 @@ class copernicus_sentinel_2(AbstractDownloader):
     def downloadstatuschecker(self, signal):
         # TO DO: Sentinel 형식에 맞게 변경시켜야함 
         if signal == False:
-            print("Downloading is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
+            print("COPERNICUS Sentinel-2 is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
         else:
-            print("Process is sucessful. ")
+            print("COPERNICUS Sentinel-2 is sucessful. ")
+        return signal 
+
     
     #Overriding
     def printInfo(self, fromP, toP):
@@ -226,6 +239,8 @@ class copernicus_sentinel_2(AbstractDownloader):
     
     #Overriding    
     def dbinsert(self):
+        
+        
         pass
 
 
@@ -254,9 +269,10 @@ class copernicus_sentinel_1(AbstractDownloader):
     def downloadstatuschecker(self, signal):
         # TO DO: Sentinel 형식에 맞게 변경시켜야함 
         if signal == False:
-            print("Downloading is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
+            print("COPERNICUS Sentinel-1 Downloading is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
         else:
-            print("Process is sucessful. ")
+            print("COPERNICUS Sentinel-1 is correctly downloaded. ")
+        return signal 
     
     #Overriding
     def printInfo(self, fromP, toP):
@@ -357,10 +373,11 @@ class nasa_trmmRT_downloader(AbstractDownloader):
     #Overriding
     def downloadstatuschecker(self, signal):
         if signal == False:
-            print("Downloading is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
+            print("NASA TRMM RT Downloading is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
         else:
-            print("Download is successful")
-    
+            print("NASA TRMM RT Downloading is successful")
+        return signal 
+
     
     #Overriding    
     def dbinsert(self):
@@ -422,9 +439,10 @@ class nasa_mergedIR_downloader(AbstractDownloader):
     
     def downloadstatuschecker(self, signal):
         if signal == False:
-            print("Downloading is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
+            print("NASA_MergedIR Downloading is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
         else:
-            print("Download is successful")
+            print("NASA_MergedIR Downloading is successful")
+        return signal 
             
     #Overriding    
     def dbinsert(self):

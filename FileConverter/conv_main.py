@@ -18,11 +18,16 @@ class Context:
     def __init__(self, strategy):
         self._strategy = strategy
         
-    def _setconverter(self):
+    def do_commonlogic_converter(self):
+        print("Converter Process is in process...")
         self._strategy.converter()
+        print("Converter Process is finished")
 
-    def _setdbinsert(self):
+    def do_commonlogic_dbInsert(self):
+        print("Converter Database function is in process...")
         self._strategy.dbinsert()
+        print("Converter Database function is finished")
+
 
 class AbstractConverter(ABC):
     @abstractmethod
@@ -42,7 +47,7 @@ class nasa_trmm_conv_API():
             #nasaTRMM_RT.converter()
             
             trmm = Context(nasa_trmm_converter())
-            trmm._setconverter()
+            trmm.do_commonlogic_converter()
             
             
         # Once directly send message here, you can get access on GET
@@ -53,7 +58,7 @@ class nasa_trmm_conv_API():
             nasaTRMM_RT.converter()
             """
             context = Context(nasa_trmm_converter())
-            context._setconverter()
+            context.do_commonlogic_converter()
             
         return render_template('index.html')
 
@@ -68,7 +73,7 @@ class nasa_mergedIR_conv_API():
             nasaMergedIR.converter()
             """
             merged = Context(nasa_mergedir_converter())
-            merged._setconverter()
+            merged.do_commonlogic_converter()
             
         # Once directly send message here, you can get access on GET
         elif request.method == 'GET':    
@@ -79,7 +84,7 @@ class nasa_mergedIR_conv_API():
             """
             
             merged = Context(nasa_mergedir_converter())
-            merged._setconverter()
+            merged.do_commonlogic_converter()
             
         return render_template('index.html')       
 

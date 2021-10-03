@@ -38,7 +38,6 @@ class dbconverttable_insert:
             db_cursor.close()
             mydb.close()
             
-        
         # Get List of all databases
         # db_cursor.execute("SHOW DATABASES")
         
