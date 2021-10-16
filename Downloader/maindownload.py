@@ -40,9 +40,9 @@ class Context():
         print("Download Status Checker is finished")
 
     def do_commonlogic_dbInsert(self):
-        print("DB Insert function is in processing ")
+        print("DB Insert function is in processing")
         self._strategy.dbinsert()
-        print("DB Insert function is finisheds")
+        print("DB Insert function is finished")
         
 class AbstractDownloader(ABC):
     # 타입 체커 하나 더 넣으면 좋을듯.. 그리고... 마이크로서비스 하나 더 만들어서 총 3개 운영해야 함.. 하나는 어답터 나머지 두개는 다운로더, 컨버터 이렇게
