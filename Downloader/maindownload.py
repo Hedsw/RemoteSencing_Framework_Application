@@ -61,7 +61,7 @@ class AbstractDownloader(ABC):
     @abstractmethod
     def dbinsert():
         pass
-
+"""
 class nasa_mergedIR_API():
     @app.route('/download/mergedir', methods = ['GET', 'POST'], endpoint = 'downloadAPI_mergedIR')
     def downloadAPI_mergedIR():
@@ -85,7 +85,7 @@ class nasa_mergedIR_API():
             print("OS Error")
             
         return render_template('index.html')
-
+"""
 class nasa_trmmRT_API():
     @app.route('/download/trmmRT', methods = ['GET', 'POST'], endpoint = 'downloadAPI_trmmRT')
     def downloadAPI_trmmRT():
@@ -149,101 +149,7 @@ class copernicus_sentinel_1_API():
             print("Wrong Communication Method")
             
         return render_template('index.html')
-
-class copernicus_sentinel_2_API():
-    @app.route('/download/sentinel2', methods =['GET', 'POST'], endpoint = 'downloadAPI_sentinel_2')
-    def downloadAPI_sentinel_2():
-        #from_period = request.form['periodfrom']
-        #to_period = request.form['periodto']
-        from_period = "20210901"
-        to_period = "20210909"
-        #parse_from = from_period.replace('-', '')
-        #parse_to = to_period.replace('-', '')
-        print(from_period, to_period, " <- Check Period")
-        if request.method == 'POST':
-            print("POST Method")
-            print(from_period, to_period, " Period is correctly Inserted")
-            """
-            sentinel2 = copernicus_sentinel_2()
-            # TO DO: X,Y 좌표 값 받지말고, 파일을 받는게 더 나을 듯
-            sentinel2.Sendtinel2_downloader(from_period, to_period)
-            """
-            # TO DO: X,Y 좌표 값 받지말고, 파일을 받는게 더 나을 듯s
-            context = Context(copernicus_sentinel_2())
-            lists = ""
-            context.do_commonlogic_printInfo(from_period, to_period)
-            signal = context.do_commonlogic_download(from_period, to_period, lists)
-            context.do_commonlogic_downloadstatuschecker(signal)
-            
-        elif request.method == 'GET': # GET
-            print("GET Method")
-            #print(from_period, to_period, " Period is correctly Inserted")
-            """
-            sentinel2 = copernicus_sentinel_2()
-            # TO DO: X,Y 좌표 값 받기
-            sentinel2.Sendtinel2_downloader(from_period, to_period)
-            """
-            context = Context(copernicus_sentinel_2())
-            lists = ""
-            context.do_commonlogic_printInfo(from_period, to_period)
-            signal = context.do_commonlogic_download(from_period, to_period, lists)
-            context.do_commonlogic_downloadstatuschecker(signal)
-            
-        else:
-            print("Wrong Communication Method")
-
-        return render_template('index.html')
-
-class copernicus_sentinel_2(AbstractDownloader):         
-    def download(self, from_period, to_period, url):
-        polydir = copernicus_sentinel_2.jsonparser("polygoninformation.geojson")
-
-        # Polygon File should be used to get GPS address. API Query is used to set options liks platformname, date, cloudcoverpercentage
-        # To do.. Setting Day and Month // XYZ 
-        # 유저보고 파일 업로드하게 시키는 것이 더 빠를 듯.. 그리고 Data-Month는 HTML을 통해서 입력 받고.. 
-        signal = sentinel2.sentinel_2(polydir, from_period, to_period)
-        print(signal, " Sentinel-2 Name")
-        
-        return render_template('index.html')
     
-    def jsonparser(json):
-        if len(json) == 0:
-            print(" No Json File")
-            return       
-        jsondir = "/home/ubuntu/RemoteSensing_v1/Downloader/sentinel_folder/" + json
-        return jsondir
-            
-    #Overriding
-    def downloadstatuschecker(self, signal):
-        # TO DO: Sentinel 형식에 맞게 변경시켜야함 
-        if signal == False:
-            print("COPERNICUS Sentinel-2 is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
-        else:
-            print("COPERNICUS Sentinel-2 is sucessful. ")
-        return signal 
-
-    
-    #Overriding
-    def printInfo(self, fromP, toP):
-        # TODO: 이거 날짜 두개 입력받아서, URl 출력하도록 만들어야함 URL은 XML 파일로 하는 것이 좋을듯.. 파싱해서 가져오는거지. mergedIR처럼
-        #print(fromP, toP)
-        if fromP == None or toP == None:
-            return "invalid Period"
-        tree = parse('../XMLfiles/sentinel.xml')
-        root = tree.getroot()
-        trmm = root.findall("DATA")
-        link = [x.findtext("LINK") for x in trmm]
-        print(link, " <-- Target URL")
-        #return link[0]
-        print("URL ", link, "FROM Period", fromP, "To Period", toP)
-    
-    #Overriding    
-    def dbinsert(self):
-        
-        
-        pass
-
-
 class copernicus_sentinel_1(AbstractDownloader):         
     def download(self, from_period, to_period, url):    
         polydir = copernicus_sentinel_1.jsonparser("polygoninformation.geojson")
@@ -381,8 +287,102 @@ class nasa_trmmRT_downloader(AbstractDownloader):
     
     #Overriding    
     def dbinsert(self):
+        pass    
+    
+"""
+class copernicus_sentinel_2_API():
+    @app.route('/download/sentinel2', methods =['GET', 'POST'], endpoint = 'downloadAPI_sentinel_2')
+    def downloadAPI_sentinel_2():
+        #from_period = request.form['periodfrom']
+        #to_period = request.form['periodto']
+        from_period = "20210901"
+        to_period = "20210909"
+        #parse_from = from_period.replace('-', '')
+        #parse_to = to_period.replace('-', '')
+        print(from_period, to_period, " <- Check Period")
+        if request.method == 'POST':
+            print("POST Method")
+            print(from_period, to_period, " Period is correctly Inserted")
+            sentinel2 = copernicus_sentinel_2()
+            # TO DO: X,Y 좌표 값 받지말고, 파일을 받는게 더 나을 듯
+            sentinel2.Sendtinel2_downloader(from_period, to_period)
+            # TO DO: X,Y 좌표 값 받지말고, 파일을 받는게 더 나을 듯s
+            context = Context(copernicus_sentinel_2())
+            lists = ""
+            context.do_commonlogic_printInfo(from_period, to_period)
+            signal = context.do_commonlogic_download(from_period, to_period, lists)
+            context.do_commonlogic_downloadstatuschecker(signal)
+            
+        elif request.method == 'GET': # GET
+            print("GET Method")
+            #print(from_period, to_period, " Period is correctly Inserted")
+            sentinel2 = copernicus_sentinel_2()
+            # TO DO: X,Y 좌표 값 받기
+            sentinel2.Sendtinel2_downloader(from_period, to_period)
+            context = Context(copernicus_sentinel_2())
+            lists = ""
+            context.do_commonlogic_printInfo(from_period, to_period)
+            signal = context.do_commonlogic_download(from_period, to_period, lists)
+            context.do_commonlogic_downloadstatuschecker(signal)
+            
+        else:
+            print("Wrong Communication Method")
+
+        return render_template('index.html')
+"""
+"""
+class copernicus_sentinel_2(AbstractDownloader):         
+    def download(self, from_period, to_period, url):
+        polydir = copernicus_sentinel_2.jsonparser("polygoninformation.geojson")
+
+        # Polygon File should be used to get GPS address. API Query is used to set options liks platformname, date, cloudcoverpercentage
+        # To do.. Setting Day and Month // XYZ 
+        # 유저보고 파일 업로드하게 시키는 것이 더 빠를 듯.. 그리고 Data-Month는 HTML을 통해서 입력 받고.. 
+        signal = sentinel2.sentinel_2(polydir, from_period, to_period)
+        print(signal, " Sentinel-2 Name")
+        
+        return render_template('index.html')
+    
+    def jsonparser(json):
+        if len(json) == 0:
+            print(" No Json File")
+            return       
+        jsondir = "/home/ubuntu/RemoteSensing_v1/Downloader/sentinel_folder/" + json
+        return jsondir
+            
+    #Overriding
+    def downloadstatuschecker(self, signal):
+        # TO DO: Sentinel 형식에 맞게 변경시켜야함 
+        if signal == False:
+            print("COPERNICUS Sentinel-2 is failure. Check Further procedure. 1. Check Thread is not broken. 2. Check URL is not broken.")
+        else:
+            print("COPERNICUS Sentinel-2 is sucessful. ")
+        return signal 
+
+    
+    #Overriding
+    def printInfo(self, fromP, toP):
+        # TODO: 이거 날짜 두개 입력받아서, URl 출력하도록 만들어야함 URL은 XML 파일로 하는 것이 좋을듯.. 파싱해서 가져오는거지. mergedIR처럼
+        #print(fromP, toP)
+        if fromP == None or toP == None:
+            return "invalid Period"
+        tree = parse('../XMLfiles/sentinel.xml')
+        root = tree.getroot()
+        trmm = root.findall("DATA")
+        link = [x.findtext("LINK") for x in trmm]
+        print(link, " <-- Target URL")
+        #return link[0]
+        print("URL ", link, "FROM Period", fromP, "To Period", toP)
+    
+    #Overriding    
+    def dbinsert(self):
+        
+        
         pass
-     
+"""
+
+
+"""
 class nasa_mergedIR_downloader(AbstractDownloader):
     def download(self, from_period, to_period, url):
         try:
@@ -447,7 +447,7 @@ class nasa_mergedIR_downloader(AbstractDownloader):
     #Overriding    
     def dbinsert(self):
         pass
-
+"""
 # Here is Download Port Number
 app.run(host='0.0.0.0', port=5005)   
 

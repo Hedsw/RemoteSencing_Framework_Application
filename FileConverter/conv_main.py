@@ -18,18 +18,18 @@ class Context:
     def __init__(self, strategy):
         self._strategy = strategy
         
-    def do_commonlogic_converter(self):
-        print("Converter Process is in process...")
-        self._strategy.converter()
-        print("Converter Process is finished")
+    def do_commonlogic_processor(self):
+        print("Processor Process is in process...")
+        self._strategy.processor()
+        print("Processor Process is finished")
 
     def do_commonlogic_dbInsert(self):
-        print("Converter Database function is in process...")
+        print("Processor Database function is in process...")
         self._strategy.dbinsert()
-        print("Converter Database function is finished")
+        print("Processor Database function is finished")
 
 
-class AbstractConverter(ABC):
+class Abstractprocessor(ABC):
     @abstractmethod
     def converter():
         pass
@@ -39,10 +39,10 @@ class AbstractConverter(ABC):
         pass
 
 class nasa_trmm_conv_API():
-    @app.route('/converter/trmm', methods=['POST','GET'], endpoint = 'nasa_trmm_convert')
-    def nasa_trmm_convert():
+    @app.route('/processor/trmm', methods=['POST','GET'], endpoint = 'nasa_trmm_processor')
+    def nasa_trmm_processor():
         if request.method == 'POST':
-            print("NASA_TRMMRT NC4 Converter POST Method starts")    
+            print("NASA_TRMMRT NC4 Processor POST Method starts")    
             #nasaTRMM_RT = nasa_trmm_converter()
             #nasaTRMM_RT.converter()
             
@@ -52,72 +52,19 @@ class nasa_trmm_conv_API():
             
         # Once directly send message here, you can get access on GET
         elif request.method == 'GET':    
-            print("NASA_TRMMRT NC4 Converter GET Method starts")    
+            print("NASA_TRMMRT NC4 Processor GET Method starts")    
             """
-            nasaTRMM_RT = nasa_trmm_converter()
-            nasaTRMM_RT.converter()
+            nasaTRMM_RT = nasa_trmm_processor()
+            nasaTRMM_RT.processor()
             """
             context = Context(nasa_trmm_converter())
             context.do_commonlogic_converter()
             
         return render_template('index.html')
-
-
-class nasa_mergedIR_conv_API():
-    @app.route('/converter/mergedIR', methods=['POST','GET'], endpoint = 'nasa_mergedIR_convert')
-    def nasa_mergedIR_convert():
-        if request.method == 'POST':
-            print("MergedIR NC4 Converter POST Method starts")    
-            """
-            nasaMergedIR = nasa_mergedir_converter()
-            nasaMergedIR.converter()
-            """
-            merged = Context(nasa_mergedir_converter())
-            merged.do_commonlogic_converter()
             
-        # Once directly send message here, you can get access on GET
-        elif request.method == 'GET':    
-            print("MergedIR NC4 Converter GET Method starts")    
-            """
-            nasaMergedIR = nasa_mergedir_converter()
-            nasaMergedIR.converter()
-            """
-            
-            merged = Context(nasa_mergedir_converter())
-            merged.do_commonlogic_converter()
-            
-        return render_template('index.html')       
-
-
-class nasa_mergedir_converter(AbstractConverter):
-    def converter(self):
-        #print(response.text)
+class nasa_trmm_converter(Abstractprocessor):
+    def processor(self):
         print("NC4 Converter POST Method starts")    
-
-        # This is CONVERTER WIHTOUT THREAD 
-        os.system('rm -rf ../storage/nc4file/*1')
-        lists = glob('../storage/nc4file/*.nc4')
-        for i in range(len(lists)):   
-            #fileconvert_class.nc4converter(i, lists)
-            #print(lists[i])
-            tmp = lists[i]
-            print(tmp.split('/'))
-            splited = tmp.split('/')
-            print(tmp, " Splited")
-            filename = splited[-1].split('.')
-            fileconvert_class.nc4converter(i, lists, filename[0])
-            
-        # THIS IS COVERTER WITH THREAD    
-        # When we use Thread, our virtual machine's power is not enough to run large amount of thread again.    
-        # ThreadNC4.threadstarter()
-        return render_template('index.html')
-    def dbinsert(self):
-        pass
-            
-class nasa_trmm_converter(AbstractConverter):
-    def converter(self):
-        print("NC4 Converter POST Method starts")    
-
         # This is CONVERTER WIHTOUT THREAD 
         os.system('rm -rf ../storage/nc4file/*1')
         lists = glob('../storage/nc4file/*.nc4')
@@ -236,6 +183,57 @@ class fileconverter:
 
         return render_template('index.html')
 """
+
+"""
+class nasa_mergedIR_conv_API():
+    @app.route('/converter/mergedIR', methods=['POST','GET'], endpoint = 'nasa_mergedIR_convert')
+    def nasa_mergedIR_convert():
+        if request.method == 'POST':
+            print("MergedIR NC4 Converter POST Method starts")    
+            nasaMergedIR = nasa_mergedir_converter()
+            nasaMergedIR.converter()
+            merged = Context(nasa_mergedir_converter())
+            merged.do_commonlogic_converter()
+            
+        # Once directly send message here, you can get access on GET
+        elif request.method == 'GET':    
+            print("MergedIR NC4 Converter GET Method starts")    
+            nasaMergedIR = nasa_mergedir_converter()
+            nasaMergedIR.converter()
+            
+            merged = Context(nasa_mergedir_converter())
+            merged.do_commonlogic_converter()
+            
+        return render_template('index.html')       
+
+
+class nasa_mergedir_converter(AbstractConverter):
+    def converter(self):
+        #print(response.text)
+        print("NC4 Converter POST Method starts")    
+
+        # This is CONVERTER WIHTOUT THREAD 
+        os.system('rm -rf ../storage/nc4file/*1')
+        lists = glob('../storage/nc4file/*.nc4')
+        for i in range(len(lists)):   
+            #fileconvert_class.nc4converter(i, lists)
+            #print(lists[i])
+            tmp = lists[i]
+            print(tmp.split('/'))
+            splited = tmp.split('/')
+            print(tmp, " Splited")
+            filename = splited[-1].split('.')
+            fileconvert_class.nc4converter(i, lists, filename[0])
+            
+        # THIS IS COVERTER WITH THREAD    
+        # When we use Thread, our virtual machine's power is not enough to run large amount of thread again.    
+        # ThreadNC4.threadstarter()
+        return render_template('index.html')
+    def dbinsert(self):
+        pass
+      
+"""      
+
 # Convert Port Number
 app.run(host='0.0.0.0', port=5003)
 

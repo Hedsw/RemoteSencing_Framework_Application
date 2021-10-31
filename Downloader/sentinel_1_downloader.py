@@ -22,11 +22,14 @@ class sentinel1:
         
         api = SentinelAPI(USERID, PASSWORD, "https://scihub.copernicus.eu/dhus/")
         # download single scene by known product id
-        #product_id = '22e7af63-07ad-4076-8541-f6655388dc5e'
+        product_id = '22e7af63-07ad-4076-8541-f6655388dc5e'
+        #product_id = 'c10089cc-dcb1-4a12-8a8f-e05e572109e2'
+        #product_id = '7efe2279-b62c-48db-b6c0-f944e944d3ba'
         # This is to download directly through product_id
-        #api.download(product_id)
+        api.download(product_id)
 
         # search by polygon, time, and SciHub query keywords
+        """
         footprint = geojson_to_wkt(read_geojson(jsondirectory))
         periodFrom_TEST = "20190622"
         periodTo_TEST = "20190624"
@@ -45,6 +48,7 @@ class sentinel1:
         if len(products) > 4:
             print("CAN NOT DOWNLOAD OVER 4 FILE CONCURRENTLY. SENTINEL API IS NOT SUPPORTED. CHECK SENTINEL API REFERENCE")
             return False
+        """
         """
         HTTP status 403 Forbidden: User quota exceeded: MediaRegulationException : 
         An exception occured while creating a stream: Maximum number of 4 concurrent flows achieved by the user "kannsky"        
