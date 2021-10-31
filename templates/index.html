@@ -17,12 +17,12 @@
     <nav class="w3-sidebar w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:250px;font-weight:bold;" id="mySidebar"><br>
       <div class="w3-container">
         <h3 class="w3-padding-64"><b><br>File Types</b></h3>
-        <a href="" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Merged_IR</a>
+       <!--  <a href="" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Merged_IR</a> -->
         <a href="" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Sentinel-1</a> 
-        <a href="" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Sentinel-2</a>
+        <!-- <a href="" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Sentinel-2</a> -->
         <a href="" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">TRMM_DOWNLOADER</a> 
         <!-- 여기다가 이제.. Modis, Merged_IR, Sentinel-1, Sentinel-2, Summarization를 기존의 index.html으로 있는 것을 각각 타입에 맞게 다 바꿔서 넣어야 함-->
-        <a href="" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Modis</a> 
+        <!-- <a href="" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Modis</a> -->
       </div>
     </nav>
     
@@ -41,6 +41,8 @@
           <div class="row">
             <div class="col-xs-12 col-md-8 col-md-offset-2">
               <h1 class="text-center">Choose a type and downloading periods </h1>
+              
+              <!-- 
               <p>Merged IR</p>
               <form action='/download/mergedir', method = 'POST'>
                 <label for="mergedIR">Choose a type:</label>
@@ -60,9 +62,10 @@
                 </label>
                 <button>Submit</button>
               </form>
+              -->
 
               <p>Sentinel-1</p>
-              <form action='/download/sentinel1', method = 'POST'>
+              <form action='/processors/trmmRT', method = 'POST'>
                 <label for="sentinel_1">Type is sentinel1</label>
                 <select name="lists" id="lists">
                   <option value="Sent1">Sentinel1</option>
@@ -80,7 +83,7 @@
                 </label>
                 <button>Submit</button>
               </form>
-
+              <!-- 
               <p>Sentinel-2</p>
               <form action='/download/sentinel2', method = 'POST'>
                 <label for="sentinel_2">Type is sentinel2</label>
@@ -100,9 +103,9 @@
                 </label>
                 <button>Submit</button>
               </form>
-
+              -->
               <p>TRMM Downloader</p>
-              <form action='/download/trmmRT', method = 'POST'>
+              <form action='/downloads/trmmRT', method = 'POST'>
                 <label for="trmm">Choose a type:</label>
                 <select name="lists" id="lists">
                   <option value="TRMM_3B42RT.7">TRMM_3B42RT.7</option>
@@ -125,18 +128,26 @@
 
 
               <p>TRMM Converter Operator</p>
-              <form action='/converter/trmm', method = 'POST'>
+              <form action='/professors/trmmrt', method = 'POST'>
                                 
+                <label>
+                  Click below button to run Professor.  
+                </label>
+                <button>Submit</button>
+              </form>
+              <!--
+              <p>MergedIR Converter Operator</p>
+              <form action='/converter/mergedIR', method = 'POST'>
                 <label>
                   Click below button to run Converter.  
                 </label>
                 <button>Submit</button>
               </form>
-
-              <p>MergedIR Converter Operator</p>
-              <form action='/converter/mergedIR', method = 'POST'>
+              -->
+              <p>Sentinel-1 Converter Operator</p>
+              <form action='/professors/sentinel1', method = 'POST'>
                 <label>
-                  Click below button to run Converter.  
+                  Click below button to run Professoe.  
                 </label>
                 <button>Submit</button>
               </form>

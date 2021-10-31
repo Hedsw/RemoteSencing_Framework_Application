@@ -79,7 +79,6 @@ class main_schedular_trmmRT():
                 processorRT_response = request.get("http://0.0.0.0/processors/trmmRT")
                 if processorRT_response.status_code != 404 or downloadRT_response.status_code != 403:
                     return ("PROCESSOR CONNECTION ERROR trmmRT")
-                
             else:
                 print("GET")
                 pass
