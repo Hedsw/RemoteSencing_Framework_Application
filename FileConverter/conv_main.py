@@ -28,7 +28,6 @@ class Context:
         self._strategy.dbinsert()
         print("Processor Database function is finished")
 
-
 class Abstractprocessor(ABC):
     @abstractmethod
     def converter():
@@ -39,7 +38,7 @@ class Abstractprocessor(ABC):
         pass
 
 class nasa_trmm_conv_API():
-    @app.route('/processor/trmm', methods=['POST','GET'], endpoint = 'nasa_trmm_processor')
+    @app.route('/processors/trmmRT', methods=['POST','GET'], endpoint = 'nasa_trmm_processor')
     def nasa_trmm_processor():
         if request.method == 'POST':
             print("NASA_TRMMRT NC4 Processor POST Method starts")    
@@ -48,7 +47,6 @@ class nasa_trmm_conv_API():
             
             trmm = Context(nasa_trmm_converter())
             trmm.do_commonlogic_converter()
-            
             
         # Once directly send message here, you can get access on GET
         elif request.method == 'GET':    
@@ -205,8 +203,6 @@ class nasa_mergedIR_conv_API():
             merged.do_commonlogic_converter()
             
         return render_template('index.html')       
-
-
 class nasa_mergedir_converter(AbstractConverter):
     def converter(self):
         #print(response.text)
@@ -231,7 +227,6 @@ class nasa_mergedir_converter(AbstractConverter):
         return render_template('index.html')
     def dbinsert(self):
         pass
-      
 """      
 
 # Convert Port Number

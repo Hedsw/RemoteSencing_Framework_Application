@@ -61,31 +61,7 @@ class AbstractDownloader(ABC):
     @abstractmethod
     def dbinsert():
         pass
-"""
-class nasa_mergedIR_API():
-    @app.route('/download/mergedir', methods = ['GET', 'POST'], endpoint = 'downloadAPI_mergedIR')
-    def downloadAPI_mergedIR():
-        try:
-            if request.method == 'POST':
-                # Sub Class
-                print("POST")
-                from_period = request.form['periodfrom']
-                to_period = request.form['periodto']
-                url = ""
-                lists = request.form['lists']
-                print(from_period, to_period, lists, " Work?")
-                context = Context(nasa_mergedIR_downloader())
-                context.do_commonlogic_printInfo(from_period, to_period)
-                signal = context.do_commonlogic_download(from_period, to_period, url)
-                context.do_commonlogic_downloadstatuschecker(signal)
-            else:
-                print("GET")
-                pass     
-        except OSError:
-            print("OS Error")
-            
-        return render_template('index.html')
-"""
+
 class nasa_trmmRT_API():
     @app.route('/download/trmmRT', methods = ['GET', 'POST'], endpoint = 'downloadAPI_trmmRT')
     def downloadAPI_trmmRT():
@@ -288,6 +264,33 @@ class nasa_trmmRT_downloader(AbstractDownloader):
     #Overriding    
     def dbinsert(self):
         pass    
+
+"""
+class nasa_mergedIR_API():
+    @app.route('/download/mergedir', methods = ['GET', 'POST'], endpoint = 'downloadAPI_mergedIR')
+    def downloadAPI_mergedIR():
+        try:
+            if request.method == 'POST':
+                # Sub Class
+                print("POST")
+                from_period = request.form['periodfrom']
+                to_period = request.form['periodto']
+                url = ""
+                lists = request.form['lists']
+                print(from_period, to_period, lists, " Work?")
+                context = Context(nasa_mergedIR_downloader())
+                context.do_commonlogic_printInfo(from_period, to_period)
+                signal = context.do_commonlogic_download(from_period, to_period, url)
+                context.do_commonlogic_downloadstatuschecker(signal)
+            else:
+                print("GET")
+                pass     
+        except OSError:
+            print("OS Error")
+            
+        return render_template('index.html')
+"""
+
     
 """
 class copernicus_sentinel_2_API():
@@ -449,7 +452,7 @@ class nasa_mergedIR_downloader(AbstractDownloader):
         pass
 """
 # Here is Download Port Number
-app.run(host='0.0.0.0', port=5005)   
+app.run(host='0.0.0.0', port=5001)   
 
 
 

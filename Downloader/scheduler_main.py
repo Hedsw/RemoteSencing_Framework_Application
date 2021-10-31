@@ -63,28 +63,56 @@ class AbstractDownloader(ABC):
     def dbinsert():
         pass
 """
-class main_schedular():
-    @app.route('/schedular/trmmrt', methods = ['GET', 'POST'], endpoint = 'trmmrtschedular')
+class main_schedular_trmmRT():
+    @app.route('/schedulars/trmmrt', methods = ['GET', 'POST'], endpoint = 'trmmrtschedular')
     def trmmrtschedular():
         try:
             if request.method == 'POST':
-                # Sub Class
+                # Downloader 
                 downloadRT_response = requests.get("http://0.0.0.0/downloads/trmmRT")
                 if downloadRT_response.status_code != 404 or downloadRT_response.status_code != 403:
-                    return ("Error")
-                
-                processorRT_response = request.get("http://0.0.0/")
+                    return ("DOWNLOAD CONNECTION ERROR trmmRT")
+
+                print("Download Success")
+
+                # File Professor
+                processorRT_response = request.get("http://0.0.0.0/processors/trmmRT")
+                if processorRT_response.status_code != 404 or downloadRT_response.status_code != 403:
+                    return ("PROCESSOR CONNECTION ERROR trmmRT")
                 
             else:
                 print("GET")
                 pass
         except OSError:
-            print("OS ERORR. Check your AWS EC2 machine ")
+            print("OS ERORR. Check your AWS EC2 machine")
         return render_template('index.html')
 
-
+class main_schedular_sentinel1():
+    @app.route('/schedulars/sentinel1', methods = ['GET', 'POST'], endpoint = 'sentinel1_schedular')
+    def sentinel1_schedular():
+        try:
+            if request.method == 'POST':
+                # Downloader 
+                downloadSenti_response = requests.get("http://0.0.0.0/downloads/sentinel1")
+                if downloadSenti_response.status_code != 404 or downloadSenti_response.status_code != 403:
+                    return ("DOWNLOAD CONNECTION ERROR sentinel1")
+                
+                print("Download Success")
+                
+                # File Professor
+                processorSenti_response = request.get("http://0.0.0.0/processors/sentinel1")
+                if processorSenti_response.status_code != 404 or processorSenti_response.status_code != 403:
+                    return ("PROCESSOR CONNECTION ERROR sentinel1 ")
+            else:
+                print("GET")
+                pass
+            
+        except OSError:
+            print("OS ERORR. Check your AWS EC2 machine ")
+        return render_template('index.html')
+    
 # Here is Download Port Number
-app.run(host='0.0.0.0', port=5003)   
+app.run(host='0.0.0.0', port=5002)   
 
 
 
