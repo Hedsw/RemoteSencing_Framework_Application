@@ -72,7 +72,6 @@ class main_schedular_trmmRT():
                 downloadRT_response = requests.get("http://0.0.0.0/downloads/trmmRT")
                 if downloadRT_response.status_code != 404 or downloadRT_response.status_code != 403:
                     return ("DOWNLOAD CONNECTION ERROR trmmRT")
-
                 print("Download Success")
 
                 # File Professor
@@ -95,7 +94,6 @@ class main_schedular_sentinel1():
                 downloadSenti_response = requests.get("http://0.0.0.0/downloads/sentinel1")
                 if downloadSenti_response.status_code != 404 or downloadSenti_response.status_code != 403:
                     return ("DOWNLOAD CONNECTION ERROR sentinel1")
-                
                 print("Download Success")
                 
                 # File Professor
