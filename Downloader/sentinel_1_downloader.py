@@ -19,6 +19,7 @@ class sentinel1:
         PASSWORD = str(PASSWORD[0])
         #print(type(USERID), type(PASSWORD) , " What is typed?")
         #print(USERID, PASSWORD)
+        # barot, masterproject@201
         
         api = SentinelAPI(USERID, PASSWORD, "https://scihub.copernicus.eu/dhus/")
         # download single scene by known product id
